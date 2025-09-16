@@ -4,48 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/PythonProject4.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/product_api.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/user.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/config/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/config/env.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/database/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/database/cart_crud.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/database/create_tables.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/database/db_config.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/database/init_db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/database/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/cart_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/catalog_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/menu_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/product_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/handlers/start_handler.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/catalog_keyboard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/product_keyboard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/keyboards/start_keyboard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/get_lang.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/langs/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/langs/en.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/langs/ru.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/langs/uz.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/locale/languages.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/state/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/state/user_state.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="asd">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,18 +33,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.env.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.env.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\PycharmProjects\PythonProject4\bot\locale\langs" />
@@ -138,6 +98,19 @@
       <option name="presentableId" value="Default" />
       <updated>1757155600005</updated>
     </task>
+    <task id="LOCAL-00001" summary="asd">
+      <option name="closed" value="true" />
+      <created>1758023608020</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1758023608020</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="asd" />
+    <option name="LAST_COMMIT_MESSAGE" value="asd" />
   </component>
 </project>
