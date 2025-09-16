@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/PythonProject4.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/product_api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/config/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/config/env.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/cart_crud.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/create_tables.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/db_config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/init_db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/cart_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/catalog_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/menu_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/product_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/start_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/keyboards/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/keyboards/catalog_keyboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/keyboards/product_keyboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/keyboards/start_keyboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/get_lang.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/langs/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/langs/en.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/langs/ru.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/langs/uz.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/locale/languages.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/state/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/state/user_state.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/utils/db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="32K3n2YTagPVSJMmVURlsSLtz3E" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.env.executor": "Run",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\PycharmProjects\PythonProject4\bot\locale\langs" />
+      <recent name="C:\Users\user\PycharmProjects\PythonProject4" />
+      <recent name="C:\Users\user\PycharmProjects\PythonProject4\bot\api" />
+      <recent name="C:\Users\user\PycharmProjects\PythonProject4\bot\api\auth" />
+      <recent name="C:\Users\user\PycharmProjects\PythonProject4\bot" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="PythonProject4" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-598b0484d0b5-e2d783800521-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.26927.74" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="" />
+      <created>1757155600005</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1757155600005</updated>
+    </task>
+    <servers />
+  </component>
+</project>
