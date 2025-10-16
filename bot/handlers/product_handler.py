@@ -7,7 +7,6 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from urllib.parse import quote
 
-from bot.config.env import MEDIA_URL
 from api.product_api import fetch_surprise_bag, fetch_surprise_bag_by_category
 from bot.keyboards.catalog_keyboard import catalog_menu_keyboard
 from bot.locale.get_lang import get_localized_text
