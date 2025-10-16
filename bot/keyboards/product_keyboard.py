@@ -32,8 +32,8 @@ def products_pagination_keyboard(lang: str, category: str, page: int, total_page
         kb.row(*nav_row)
 
     kb.button(
-        text=get_localized_text(lang, "menu.back"),
-        callback_data=f"cat_{category}"
+        text=get_localized_text(lang, "menu.back_to_catalog"),
+        callback_data="back_to_catalog"
     )
     kb.adjust(5, 2, 1)
     return kb.as_markup()

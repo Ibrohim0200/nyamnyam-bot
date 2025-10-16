@@ -1,8 +1,91 @@
 texts = {
     "start": {
-        "choose_language": "🌐 Please choose a language to leave your information:",
-        "exists": "ℹ️ You have already submitted your information!",
-        "language_selected": "🇬🇧 English language selected.",
-        "welcome": "👋 Welcome!"
-    }
+        "choose_language": "Choose a language 👇",
+        "language_selected": "You selected English ✅"
+    },
+
+    "menu": {
+        "main": "🏠 Main Menu",
+        "catalog_clicked": "📦 Catalog opened",
+        "login_clicked": "🔑 Login selected",
+        "register_clicked": "📝 Register selected",
+        "back": "↩️ Back",
+        "back_to_catalog": "↩️ Back to Catalog",
+        "cart": "Cart",
+        "title": "🗂 Main Menu",
+        "catalog": "📦 Catalog",
+        "profile": "Profile",
+        "orders": "My Orders",
+        "help": "Help",
+    },
+
+    "catalog": {
+        "send_location": "Send your location to show the distance to products.",
+        "location": "📍 Send location",
+        "location_saved": "📍 Location saved!",
+        "choose_category": "Select the desired section from the catalog:",
+        "empty": "No products found in this category.",
+        "category_title": "{cat} category",
+        "superbox": "Surprise Bag",
+        "update_location": "📍 Update Location",
+        "fetch_error": "❌ Error while fetching data:",
+        "api_error": "❌ Invalid response from API. Please contact the admin.",
+        "superbox_title": "🎁 Surprise Bag",
+        "empty_superbox": "❌ No products available in this section.",
+        "choose_superbox_section": "🎁 Choose a Surprise bag section:",
+        "section_popular": "Popular",
+        "section_recommended": "Recommended",
+        "section_new": "New",
+        "section_tomorrow": "Tomorrow",
+        "section_collect_for_now": "Collect for now",
+        "section_morning": "Morning",
+        "section_afternoon": "Afternoon",
+        "section_evening": "Evening",
+    },
+
+    "product": {
+        "price": "Price",
+        "quantity": "Quantity",
+        "distance": "Distance",
+        "rating": "Rating",
+        "pickup_time": "Pickup time",
+        "branch": "Branch",
+        "add_to_cart": "🛒 Add to Cart",
+        "increase": "➕ Increase",
+        "decrease": "➖ Decrease",
+        "back_to_list": "↩️ Back to List",
+        "not_found": "Product not found"
+    },
+
+    "cart": {
+        "empty": "🛒 Cart is empty.",
+        "warning": "❗ Quantity cannot be less than 1",
+        "empty_hint": "No products have been added yet.",
+        "title": "🛒 Products in Cart",
+        "view": "🛒 Cart",
+        "total": "Total",
+        "grand_total": "Grand Total",
+        "checkout": "✅ Checkout",
+        "clear": "🗑 Clear",
+        "added": "✅ Product added to cart",
+        "delete_confirm": "will be deleted.",
+        "no_undo": "This action cannot be undone.",
+        "delete": "❌ Delete",
+        "delete_yes": "✅ Yes",
+        "delete_no": "❌ No"
+    },
+    "order": {
+        "summary": "📝 Order summary",
+        "confirm": "✅ Confirm",
+        "success": "✅ Your order has been placed successfully!",
+        "payment_process": "Payment process",
+        "payment_hint": "To make the payment, please click the button below:",
+        "payment_button": "💳 Pay now",
+    },
+
+    "pagination": {
+        "prev": "⬅️ Previous",
+        "next": "Next ➡️",
+        "page": "Page {page}",
+    },
 }

@@ -1,15 +1,27 @@
 import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-from bot.handlers import start_handler, catalog_handler, product_handler, cart_handler, menu_handler
+from bot.handlers import start_handler, catalog_handler, product_handler, cart_handler, menu_handler, order_handler
 from bot.database.create_tables import create_tables
 from bot.config.env import BOT_TOKEN
 from aiogram.types import BotCommand
 
 
+
+from aiogram.exceptions import TelegramBadRequest
+
+async def safe_delete(bot, chat_id, message_id):
+    try:
+        await bot.delete_message(chat_id, message_id)
+    except TelegramBadRequest:
+        pass
+
 async def set_bot_commands(bot: Bot):
     commands = [
-        BotCommand(command="start", description="Botni ishga tushirish"),
+        BotCommand(command="start", description="🚀 Botni ishga tushirish"),
+        BotCommand(command="catalog", description="📂 Katalogni ko‘rish"),
+        BotCommand(command="cart", description="🛒 Savatni ko‘rish"),
+        BotCommand(command="help", description="❓ Yordam"),
     ]
     await bot.set_my_commands(commands)
 
@@ -25,6 +37,7 @@ async def main():
     dp.include_router(product_handler.router)
     dp.include_router(cart_handler.router)
     dp.include_router(menu_handler.router)
+    dp.include_router(order_handler.router)
 
     await set_bot_commands(bot)
 

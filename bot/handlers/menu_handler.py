@@ -3,30 +3,25 @@ from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from bot.database.db_config import async_session
+from bot.database.views import get_user_lang
 from bot.locale.get_lang import get_localized_text
-from bot.handlers.cart_handler import USER_CARTS, PRODUCTS
 
 router = Router()
 
 
-def get_cart_total(user_id: int) -> str:
-    cart = USER_CARTS.get(user_id, {})
+async def get_cart_total(state: FSMContext) -> str:
+    data = await state.get_data()
+    cart = data.get("cart", [])
     total = 0
-    for category, items in cart.items():
-        for prod_id, qty in items.items():
-            try:
-                price = int(PRODUCTS[category][prod_id]["price"].replace(" ", "").replace("so‘m", ""))
-                total += price * qty
-            except Exception:
-                continue
+    for item in cart:
+        total += item["price"] * item["qty"]
     return f"{total:,} so‘m"
 
 
-def build_main_menu(lang: str, user_id: int):
-    total = get_cart_total(user_id)
-
+async def build_main_menu(user_id: int, lang: str):
     kb = InlineKeyboardBuilder()
-    kb.button(text=f"📦 {get_localized_text(lang, 'menu.catalog')}", callback_data="catalog")
+    kb.button(text=f"{get_localized_text(lang, 'menu.catalog')}", callback_data="catalog")
     kb.button(text=f"🛒 {get_localized_text(lang, 'menu.cart')}", callback_data="cart")
     kb.button(text=f"👤 {get_localized_text(lang, 'menu.profile')}", callback_data="profile")
     kb.button(text=f"📜 {get_localized_text(lang, 'menu.orders')}", callback_data="orders")
@@ -37,41 +32,55 @@ def build_main_menu(lang: str, user_id: int):
 
 @router.callback_query(F.data == "test")
 async def test_entry(callback: CallbackQuery, state: FSMContext):
-    lang = (await state.get_data()).get("lang", "uz")
-    kb = build_main_menu(lang, callback.from_user.id)
+    user_id = callback.from_user.id
+    async with async_session() as db:
+        lang = await get_user_lang(db, user_id)
+
+    kb = await build_main_menu(user_id, lang)
     await callback.message.edit_text(get_localized_text(lang, "menu.main"), reply_markup=kb)
-
-
-@router.callback_query(F.data == "catalog")
-async def open_catalog(callback: CallbackQuery, state: FSMContext):
-    lang = (await state.get_data()).get("lang", "uz")
-    await callback.answer()
-    await callback.message.answer(get_localized_text(lang, "menu.catalog_clicked"))
-
-
-@router.callback_query(F.data == "cart")
-async def open_cart(callback: CallbackQuery, state: FSMContext):
-    lang = (await state.get_data()).get("lang", "uz")
-    await callback.answer()
-    await callback.message.answer(get_localized_text(lang, "menu.cart_clicked"))
 
 
 @router.callback_query(F.data == "profile")
 async def open_profile(callback: CallbackQuery, state: FSMContext):
-    lang = (await state.get_data()).get("lang", "uz")
+    user_id = callback.from_user.id
+    async with async_session() as db:
+        lang = await get_user_lang(db, user_id)
+
     await callback.answer()
     await callback.message.answer(get_localized_text(lang, "menu.profile_clicked"))
 
 
 @router.callback_query(F.data == "orders")
 async def open_orders(callback: CallbackQuery, state: FSMContext):
-    lang = (await state.get_data()).get("lang", "uz")
+    user_id = callback.from_user.id
+    async with async_session() as db:
+        lang = await get_user_lang(db, user_id)
+
     await callback.answer()
     await callback.message.answer(get_localized_text(lang, "menu.orders_clicked"))
 
 
 @router.callback_query(F.data == "help")
 async def open_help(callback: CallbackQuery, state: FSMContext):
-    lang = (await state.get_data()).get("lang", "uz")
+    user_id = callback.from_user.id
+    async with async_session() as db:
+        lang = await get_user_lang(db, user_id)
+
     await callback.answer()
     await callback.message.answer(get_localized_text(lang, "menu.help_clicked"))
+
+
+@router.callback_query(F.data == "back_to_main_menu")
+async def back_to_main_menu(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
+    try:
+        await callback.message.delete()
+    except Exception:
+        pass
+
+    user_id = callback.from_user.id
+    async with async_session() as db:
+        lang = await get_user_lang(db, user_id)
+
+    kb = await build_main_menu(user_id, lang)
+    await callback.message.answer(get_localized_text(lang, "menu.main"), reply_markup=kb)

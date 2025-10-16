@@ -5,7 +5,7 @@ texts = {
     },
 
     "menu": {
-        "main": "Asosiy menyu:",
+        "main": "🏠 Asosiy menyu",
         "catalog_clicked": "📦 Katalog ochildi",
         "login_clicked": "🔑 Login tanlandi",
         "register_clicked": "📝 Register tanlandi",
@@ -13,7 +13,7 @@ texts = {
         "back_to_catalog": "↩️ Katalogga qaytish",
         "cart": "Savat",
         "title": "🗂 Asosiy menyu",
-        "catalog": "Katalog",
+        "catalog": "📦 Katalog",
         "profile": "Profil",
         "orders": "Buyurtmalarim",
         "help": "Yordam",
@@ -21,18 +21,27 @@ texts = {
 
     "catalog": {
         "send_location": "Mahsulotlar masofasini ko‘rsatish uchun joylashuvingizni yuboring.",
+        "location": "📍 Joylashuvni ulashish",
         "location_saved": "📍 Joylashuv saqlandi!",
         "choose_category": "Katalogdan kerakli bo‘limni tanlang:",
         "empty": "Bu kategoriyada mahsulotlar topilmadi.",
         "category_title": "{cat} kategoriyasi",
-        "all": "Hamma",
         "superbox": "Surprise Bag",
-        "food": "Taomlar",
-        "fastfood": "Fast Food",
         "update_location": "📍 Joylashuvni Yangilash",
         "fetch_error": "❌ Ma'lumot olishda xatolik yuz berdi:",
         "api_error": "❌ API dan noto‘g‘ri javob olindi. Adminga murojaat qiling.",
-        "superbox_title": "🎁 Surprise Bag"
+        "superbox_title": "🎁 Surprise Bag",
+        ####
+        "empty_superbox": "❌ Hech bir bo‘limda mahsulot yo‘q.",
+        "choose_superbox_section": "🎁 Surprise bag bo‘limlarini tanlang:",
+        "section_popular": "Ommabop",
+        "section_recommended": "Tavsiya etilgan",
+        "section_new": "Yangi",
+        "section_tomorrow": "Ertangi",
+        "section_collect_for_now": "Hozir olish mumkin",
+        "section_morning": "Ertalab",
+        "section_afternoon": "Kunduzi",
+        "section_evening": "Kechqurun",
     },
 
     "product": {
@@ -50,17 +59,35 @@ texts = {
     },
 
     "cart": {
-        "title": "🧺 Yangilangan savat:",
+        "empty": "🛒 Savat bo‘sh.",
+        "warning": "❗ Miqdor 1 dan kichik bo‘lishi mumkin emas",
+        "empty_hint": "Hozircha mahsulot qo‘shilmagan.",
+        "title": "🛒 Savatdagi mahsulotlar",
+        "view": "🛒 Savat",
         "total": "Jami",
-        "added": "✅ {product} savatchaga qo‘shildi",
-        "qty_increased": "{product} miqdori {quantity} ga oshirildi",
-        "qty_decreased": "{product} miqdori {quantity} ga kamaytirildi",
-        "item_removed": "❌ {product} savatdan o‘chirildi",
-        "view_cart": "🛒 Savat",
+        "grand_total": "Jami summa",
+        "checkout": "✅ Buyurtma berish",
+        "clear": "🗑 Tozalash",
+        "added": "✅ Mahsulot savatga qo‘shildi",
+        "delete_confirm": "o‘chiriladi.",
+        "no_undo": "Bu amalni qaytarib bo‘lmaydi.",
+        "delete": "❌ O‘chirish",
+        "delete_yes": "✅ Ha",
+        "delete_no": "❌ Yo‘q"
+    },
+
+    "order": {
+        "summary": "📝 Buyurtma tafsilotlari",
+        "confirm": "✅ Tasdiqlash",
+        "success": "✅ Buyurtmangiz muvaffaqiyatli qabul qilindi!",
+        "payment_process": "To‘lov qilish jarayoni",
+        "payment_hint": "To‘lovni amalga oshirish uchun quyidagi tugmani bosing:",
+        "payment_button": "💳 To‘lov qilish",
     },
 
     "pagination": {
         "prev": "⬅️ Oldingi",
         "next": "Keyingi ➡️",
+        "page": "{page}-sahifa",
     },
 }

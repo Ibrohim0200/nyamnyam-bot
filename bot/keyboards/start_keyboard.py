@@ -1,5 +1,6 @@
 from bot.config.env import BASE_URL
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from bot.locale.get_lang import get_localized_text
 
 
 def start_keyboard():
@@ -10,11 +11,11 @@ def start_keyboard():
     kb.adjust(2,1)
     return kb.as_markup()
 
-def main_menu_keyboard(user_id: int):
+def main_menu_keyboard(lang: str, user_id: int):
     kb = InlineKeyboardBuilder()
-    kb.button(text="📦 Catalog", callback_data="catalog")
-    kb.button(text="🔑 Login", url=f"{BASE_URL}users/auth/login/?user_id={user_id}")
-    kb.button(text="📝 Register", url=f"{BASE_URL}users/auth/register/?user_id={user_id}")
+    kb.button(text=get_localized_text(lang, "menu.catalog"), callback_data="catalog")
+    kb.button(text=get_localized_text(lang, "menu.login_clicked"), url=f"{BASE_URL}users/auth/login/?user_id={user_id}")
+    kb.button(text=get_localized_text(lang, "menu.register_clicked"), url=f"{BASE_URL}users/auth/register/?user_id={user_id}")
     kb.button(text="⚙️ Test", callback_data="test")
     kb.adjust(1)
     return kb.as_markup()
