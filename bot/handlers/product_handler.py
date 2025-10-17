@@ -13,7 +13,7 @@ from bot.locale.get_lang import get_localized_text
 from bot.keyboards.start_keyboard import main_menu_keyboard
 from bot.keyboards.product_keyboard import products_pagination_keyboard
 from bot.database.views import get_user_lang
-from bot.database.db_config import async_session
+from bot.database.db_config import async_session_maker
 
 router = Router()
 
@@ -43,7 +43,7 @@ async def _is_image_url(url: str) -> bool:
 
 async def show_products(message: Message, category: str, page: int, state: FSMContext, callback_query: CallbackQuery = None):
     user_id = message.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     try:
@@ -107,7 +107,7 @@ async def show_product_detail(
     force_edit: bool = False
 ):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     data = await state.get_data()
@@ -224,7 +224,7 @@ async def decrease_qty(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "cat_surprise_bag")
 async def show_superbox(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     await callback.answer()
     try:
@@ -271,7 +271,7 @@ async def show_superbox(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith("superbox_section_"))
 async def show_superbox_section(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     section = callback.data.split("superbox_section_")[1]
@@ -303,7 +303,7 @@ async def show_superbox_section(callback: CallbackQuery, state: FSMContext):
 async def show_category(callback: CallbackQuery, state: FSMContext):
     category_slug = callback.data.split("_", 1)[1]
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     await callback.answer()
     try:
@@ -321,7 +321,7 @@ async def change_page(callback: CallbackQuery, state: FSMContext):
     try:
         page = int(page_str)
     except ValueError:
-        async with async_session() as db:
+        async with async_session_maker() as db:
             lang = await get_user_lang(db, callback.from_user.id)
         await callback.answer(get_localized_text(lang, "pagination.invalid"), show_alert=True)
         return
@@ -335,7 +335,7 @@ async def back_to_list(callback: CallbackQuery, state: FSMContext):
     _, _, category, page_str = callback.data.split("_", 3)
     page = int(page_str)
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     await callback.answer()
     await callback.message.delete()
@@ -345,7 +345,7 @@ async def back_to_list(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "back_to_catalog")
 async def back_to_catalog(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     try:
         await callback.message.delete()

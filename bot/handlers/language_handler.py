@@ -8,9 +8,7 @@ from bot.database.db_config import async_session_maker
 from bot.database.models import UserLang
 from sqlalchemy import select
 
-
 router = Router()
-
 
 @router.callback_query(F.data.startswith("lang_"), StateFilter(UserState.choose_language))
 async def choose_language(callback: types.CallbackQuery, state: FSMContext):
@@ -21,20 +19,24 @@ async def choose_language(callback: types.CallbackQuery, state: FSMContext):
 
     async with async_session_maker() as session:
         result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id==user_id)
-
+            select(UserLang).where(UserLang.telegram_id == user_id)
         )
-        user_lang = result.scalars().fisrt()
+        user_lang = result.scalars().first()
+
         if user_lang:
             user_lang.lang = lang
         else:
             user_lang = UserLang(telegram_id=user_id, lang=lang)
             session.add(user_lang)
+
         await session.commit()
 
     await state.clear()
+
+    kb = await main_menu_keyboard(user_id)
+
     await callback.message.edit_text(
         get_localized_text(lang, "start.language_selected"),
-        reply_markup=main_menu_keyboard(user_id)
+        reply_markup=kb
     )
     await callback.answer()

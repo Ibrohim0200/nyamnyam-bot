@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardBut
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.database.db_config import async_session
+from bot.database.db_config import async_session_maker
 from bot.database.views import get_user_lang
 from bot.locale.get_lang import get_localized_text
 
@@ -17,7 +17,7 @@ async def checkout_order(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     data = await state.get_data()
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     cart = data.get("cart", [])
 
@@ -52,7 +52,7 @@ async def checkout_order(callback: CallbackQuery, state: FSMContext):
 async def order_confirm(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     await state.update_data(cart=[])
     text = (

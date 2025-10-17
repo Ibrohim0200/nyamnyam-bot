@@ -3,7 +3,7 @@ from aiogram.types import CallbackQuery
 from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.database.db_config import async_session
+from bot.database.db_config import async_session_maker
 from bot.database.views import get_user_lang
 from bot.locale.get_lang import get_localized_text
 
@@ -33,31 +33,12 @@ async def build_main_menu(user_id: int, lang: str):
 @router.callback_query(F.data == "test")
 async def test_entry(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     kb = await build_main_menu(user_id, lang)
     await callback.message.edit_text(get_localized_text(lang, "menu.main"), reply_markup=kb)
 
-
-@router.callback_query(F.data == "profile")
-async def open_profile(callback: CallbackQuery, state: FSMContext):
-    user_id = callback.from_user.id
-    async with async_session() as db:
-        lang = await get_user_lang(db, user_id)
-
-    await callback.answer()
-    await callback.message.answer(get_localized_text(lang, "menu.profile_clicked"))
-
-
-@router.callback_query(F.data == "orders")
-async def open_orders(callback: CallbackQuery, state: FSMContext):
-    user_id = callback.from_user.id
-    async with async_session() as db:
-        lang = await get_user_lang(db, user_id)
-
-    await callback.answer()
-    await callback.message.answer(get_localized_text(lang, "menu.orders_clicked"))
 
 
 @router.callback_query(F.data == "catalog")
@@ -77,7 +58,7 @@ async def open_cart(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "help")
 async def open_help(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     lang = (await state.get_data()).get("lang", "uz")
@@ -106,7 +87,7 @@ async def back_to_main_menu(callback: CallbackQuery, state: FSMContext):
         pass
 
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     kb = await build_main_menu(user_id, lang)

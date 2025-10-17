@@ -9,7 +9,7 @@ from bot.keyboards.start_keyboard import start_keyboard, main_menu_keyboard
 from bot.handlers.catalog_handler import show_catalog_menu, user_locations
 from bot.locale.get_lang import get_localized_text
 from sqlalchemy import select
-from bot.database.db_config import async_session
+from bot.database.db_config import async_session_maker
 from bot.database.models import UserLang
 from bot.state.user_state import UserState
 
@@ -60,10 +60,9 @@ async def cmd_cart(message: types.Message, state: FSMContext):
 async def choose_language(callback: types.CallbackQuery, state: FSMContext):
     lang = callback.data.split("_")[1]
     await state.update_data(lang=lang)
-
     user_id = callback.from_user.id
 
-    async with async_session() as session:
+    async with async_session_maker() as session:
         result = await session.execute(
             select(UserLang).where(UserLang.telegram_id == user_id)
         )
@@ -72,29 +71,32 @@ async def choose_language(callback: types.CallbackQuery, state: FSMContext):
         if user_lang:
             user_lang.lang = lang
         else:
-            user_lang = UserLang(
-                telegram_id=user_id,
-                lang=lang
-            )
+            user_lang = UserLang(telegram_id=user_id, lang=lang)
             session.add(user_lang)
 
-        await session.commit()
+        await session.commit()  # ✅ сначала сохраняем
+        await session.flush()
 
-    await callback.message.delete()
+    try:
+        await callback.message.delete()
+    except Exception:
+        pass
 
     await callback.message.answer(
         get_localized_text(lang, "start.language_selected"),
         reply_markup=main_menu_keyboard(lang, user_id)
     )
     await callback.answer()
-
+    result2 = await session.execute(select(UserLang).where(UserLang.telegram_id == user_id))
+    saved = result2.scalars().first()
+    print("✅ SAVED LANG:", saved.lang if saved else None)
 
 # MENU CALLBACKS
 @router.callback_query(F.data == "catalog")
 async def catalog_handler(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
 
-    async with async_session() as session:
+    async with async_session_maker() as session:
         result = await session.execute(
             select(UserLang).where(UserLang.telegram_id == user_id)
         )
@@ -118,7 +120,7 @@ async def catalog_handler(callback: types.CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "login")
 async def login_handler(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as session:
+    async with async_session_maker() as session:
         result = await session.execute(
             select(UserLang).where(UserLang.telegram_id == user_id)
         )
@@ -132,7 +134,7 @@ async def login_handler(callback: types.CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "register")
 async def register_handler(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as session:
+    async with async_session_maker() as session:
         result = await session.execute(
             select(UserLang).where(UserLang.telegram_id == user_id)
         )

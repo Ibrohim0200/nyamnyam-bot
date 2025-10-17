@@ -63,21 +63,25 @@ async def profile_handler(callback: types.CallbackQuery, session: AsyncSession):
     await callback.message.edit_text(text=text, reply_markup=get_profile_keyboard(lang))
 
 @router.callback_query(F.data == "back_profile")
-async def back_handler(callback: types.CallbackQuery, session: AsyncSession):
+async def back_handler(callback: types.CallbackQuery):
     telegram_id = callback.from_user.id
 
-    result = await session.execute(
-        select(UserLang).where(UserLang.telegram_id == telegram_id)
-    )
-    user_lang = result.scalar_one_or_none()
-    lang = user_lang.lang if user_lang else "uz"
-    kb = build_main_menu(lang, telegram_id)
+    async with async_session_maker() as session:
+        result = await session.execute(
+            select(UserLang).where(UserLang.telegram_id == telegram_id)
+        )
+        user_lang = result.scalar_one_or_none()
+        lang = user_lang.lang if user_lang else "uz"
+
+        print("🔍 LOADED LANG:", lang)  # теперь точно увидишь язык
+
+    kb = await build_main_menu(telegram_id, lang)
+
     await callback.message.edit_text(
         text=get_localized_text(lang, "menu.title"),
         reply_markup=kb
     )
     await callback.answer()
-
 
 @router.callback_query(F.data == "change_lang")
 async def change_lang_handler(callback: types.CallbackQuery, state: FSMContext):

@@ -11,7 +11,7 @@ from bot.keyboards.start_keyboard import main_menu_keyboard
 from bot.locale.get_lang import get_localized_text
 from bot.handlers.product_handler import extract_category_and_id
 from bot.database.views import get_user_lang
-from bot.database.db_config import async_session
+from bot.database.db_config import async_session_maker
 
 router = Router()
 user_carts = {}
@@ -29,7 +29,7 @@ async def show_catalog_menu(message: types.Message, lang: str):
 async def add_to_cart(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     category, prod_id = extract_category_and_id(callback.data, 2)
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
 
     data = await state.get_data()
@@ -99,7 +99,7 @@ async def view_cart(callback: CallbackQuery, state: FSMContext):
     except Exception:
         pass
 
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
 
     data = await state.get_data()
@@ -151,7 +151,7 @@ async def clear_cart(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "back_to_catalog")
 async def back_to_catalog(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
     try:
         await callback.message.delete()
@@ -172,7 +172,7 @@ async def view_cart_item(
     data = await state.get_data()
     cart = data.get("cart", [])
 
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
 
     if idx is None:
@@ -252,7 +252,7 @@ async def cart_increase(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     cart = list(data.get("cart", []))
 
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
 
     if 0 <= idx < len(cart):
@@ -268,7 +268,7 @@ async def cart_decrease(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     cart = list(data.get("cart", []))
 
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
 
     if 0 <= idx < len(cart):
@@ -288,7 +288,7 @@ async def cart_delete_confirm(callback: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     cart = data.get("cart", [])
 
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, callback.from_user.id)
 
     if 0 <= idx < len(cart):

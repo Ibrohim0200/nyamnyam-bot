@@ -6,10 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="asd">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PythonProject4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonProject4.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/database/db_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/db_config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/locale/langs/en.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/en.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/locale/langs/ru.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/ru.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/cart_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/cart_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/catalog_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/catalog_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/language_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/language_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/menu_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/menu_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/order_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/order_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/product_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/product_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/profile_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/profile_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/start_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/start_handler.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

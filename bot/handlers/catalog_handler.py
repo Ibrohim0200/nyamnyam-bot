@@ -7,21 +7,20 @@ from bot.state.user_state import UserState
 from bot.keyboards.catalog_keyboard import location_request_keyboard, catalog_menu_keyboard
 from bot.keyboards.start_keyboard import main_menu_keyboard
 from bot.locale.get_lang import get_localized_text
-from bot.database.db_config import async_session
+from bot.database.db_config import async_session_maker
 from main import safe_delete
 
 router = Router()
 
 user_locations = {}
 
-# ====================== Open Catalog ======================
 @router.callback_query(F.data == "catalog")
 async def catalog_handler(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     chat_id = callback.message.chat.id
     bot = callback.bot
 
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     await safe_delete(bot, chat_id, callback.message.message_id)
 
@@ -46,11 +45,11 @@ async def catalog_handler(callback: types.CallbackQuery, state: FSMContext):
 
 
 
-# ====================== Save Location ======================
+
 @router.message(UserState.waiting_for_location, F.location)
 async def save_location(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
     user_locations[user_id] = (message.location.latitude, message.location.longitude)
     await state.clear()
@@ -68,7 +67,7 @@ async def save_location(message: types.Message, state: FSMContext):
 @router.message(UserState.waiting_for_location)
 async def back_to_menu_from_location(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
         back_text = get_localized_text(lang, "menu.back")
 
@@ -94,7 +93,7 @@ async def show_catalog_menu(message: types.Message, lang: str):
 @router.callback_query(F.data == "back_to_menu")
 async def back_to_main(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     await callback.answer()
@@ -112,7 +111,7 @@ async def back_to_main(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data == "update_location")
 async def update_location(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
-    async with async_session() as db:
+    async with async_session_maker() as db:
         lang = await get_user_lang(db, user_id)
 
     await callback.answer()
