@@ -19,6 +19,7 @@ texts = {
         "help": "Help",
     },
 
+
     "catalog": {
         "send_location": "Send your location to show the distance to products.",
         "location": "📍 Send location",
@@ -43,6 +44,8 @@ texts = {
         "section_evening": "Evening",
     },
 
+
+
     "product": {
         "price": "Price",
         "quantity": "Quantity",
@@ -56,6 +59,7 @@ texts = {
         "back_to_list": "↩️ Back to List",
         "not_found": "Product not found"
     },
+
 
     "cart": {
         "empty": "🛒 Cart is empty.",
@@ -72,85 +76,25 @@ texts = {
         "no_undo": "This action cannot be undone.",
         "delete": "❌ Delete",
         "delete_yes": "✅ Yes",
-        "delete_no": "❌ No"
-    },
-    "order": {
-        "summary": "📝 Order summary",
-        "confirm": "✅ Confirm",
-        "success": "✅ Your order has been placed successfully!",
-        "payment_process": "Payment process",
-        "payment_hint": "To make the payment, please click the button below:",
-        "payment_button": "💳 Pay now",
-    },
-
-    "pagination": {
-        "prev": "⬅️ Previous",
-        "next": "Next ➡️",
-        "page": "Page {page}",
-    },
-        "choose_language": "Choose a language 👇",
-        "language_selected": "You have selected English ✅"
-    },
-
-    "menu": {
-        "main": "Main menu:",
-        "catalog_clicked": "📦 Catalog opened",
-        "login_clicked": "🔑 Login selected",
-        "register_clicked": "📝 Register selected",
-        "back": "↩️ Back",
-        "back_to_catalog": "↩️ Back to catalog",
-        "cart": "Cart",
-        "title": "🗂 Main menu",
-        "catalog": "Catalog",
-        "profile": "Profile",
-        "orders": "My orders",
-        "help": "Help",
-    },
-
-    "catalog": {
-        "send_location": "Send your location to show product distances.",
-        "location_saved": "📍 Location saved!",
-        "choose_category": "Choose a category from the catalog:",
-        "empty": "No products found in this category.",
-        "category_title": "{cat} category",
-        "all": "All",
-        "superbox": "Surprise Bag",
-        "food": "Meals",
-        "fastfood": "Fast Food",
-        "update_location": "📍 Update location",
-        "fetch_error": "❌ Error fetching data:",
-        "api_error": "❌ Invalid API response. Please contact the admin.",
-        "superbox_title": "🎁 Surprise Bag"
-    },
-
-    "product": {
-        "price": "Price",
-        "quantity": "Quantity",
-        "distance": "Distance",
-        "rating": "Rating",
-        "pickup_time": "Pickup window",
-        "branch": "Branch",
-        "add_to_cart": "🛒 Add to cart",
-        "increase": "➕ Increase",
-        "decrease": "➖ Decrease",
-        "back_to_list": "↩️ Back to list",
-        "not_found": "Product not found"
-    },
-
-    "cart": {
-        "title": "🧺 Updated cart:",
-        "total": "Total",
-        "added": "✅ {product} added to cart",
+        "delete_no": "❌ No",
         "qty_increased": "{product} quantity increased to {quantity}",
         "qty_decreased": "{product} quantity decreased to {quantity}",
         "item_removed": "❌ {product} removed from cart",
         "view_cart": "🛒 Cart",
     },
 
+
+
+
     "pagination": {
         "prev": "⬅️ Previous",
         "next": "Next ➡️",
+        "page": "Page {page}",
+        "choose_language": "Choose a language 👇",
+        "language_selected": "You have selected English ✅"
     },
+
+
 
     "profile": {
         "title": "👤 Profile information:",
@@ -211,8 +155,19 @@ texts = {
         "pickup_status_text": "Pickup status: {pickup_status}",
         "branch_info": "Branch: {branch_name}",
         "pickup_time_text": "Pickup time: {pickup_time}",
-        "no_items": "❌ No items in this order"
+        "no_items": "❌ No items in this order",
     },
+
+
+    "order": {
+        "summary": "📝 Order summary",
+        "confirm": "✅ Confirm",
+        "success": "✅ Your order has been placed successfully!",
+        "payment_process": "Payment process",
+        "payment_hint": "To make the payment, please click the button below:",
+        "payment_button": "💳 Pay now",
+    },
+
 
     "order_status": {
         "paid": "✅ Paid",
