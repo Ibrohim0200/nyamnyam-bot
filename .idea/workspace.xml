@@ -4,8 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="buyurtmala">
+    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="asd">
+      <change afterPath="$PROJECT_DIR$/bot/database/crud/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/crud/cart.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/crud/user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/crud/user_lang.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/database/crud/user_tokens.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/language_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/orders_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/handlers/profile_handler.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/keyboards/orders_keyboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/keyboards/profile_keyboard.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/middlewares/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/middlewares/db.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bot/utils/status.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/database/create_tables.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/create_tables.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/database/db_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/db_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/database/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/menu_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/menu_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/locale/langs/en.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/en.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/locale/langs/ru.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/ru.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/locale/langs/uz.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/uz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/state/user_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/state/user_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +54,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Ibrohim0200/nyamnyam-bot.git&quot;,
-    &quot;accountId&quot;: &quot;5dddb84b-aa9c-4742-9f8d-8106ad7bc2d5&quot;
+    &quot;accountId&quot;: &quot;135923a0-ec3c-4102-85cc-209fc3116119&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -48,13 +71,13 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.cart_crud.executor&quot;: &quot;Run&quot;,
     &quot;Python.env.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
@@ -99,10 +122,11 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-598b0484d0b5-e2d783800521-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.26927.74" />
+        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="" />
@@ -119,39 +143,11 @@
       <option name="project" value="LOCAL" />
       <updated>1758023608020</updated>
     </task>
-    <task id="LOCAL-00002" summary="buyurtmala">
-      <option name="closed" value="true" />
-      <created>1760601983784</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1760601983784</updated>
-    </task>
-    <task id="LOCAL-00003" summary="buyurtmala">
-      <option name="closed" value="true" />
-      <created>1760602158574</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1760602158575</updated>
-    </task>
-    <option name="localTasksCounter" value="4" />
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="asd" />
-    <MESSAGE value="buyurtmala" />
-    <option name="LAST_COMMIT_MESSAGE" value="buyurtmala" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/api/product_api.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <option name="LAST_COMMIT_MESSAGE" value="asd" />
   </component>
 </project>
