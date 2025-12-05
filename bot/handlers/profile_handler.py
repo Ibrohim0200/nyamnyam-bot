@@ -1,316 +1,241 @@
-from datetime import datetime
-
+import httpx
 from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from sqlalchemy.ext.asyncio import AsyncSession
-from bot.database.crud.user import get_user
-from bot.database.db_config import async_session_maker
-from bot.database.models import UserLang, User
-from bot.handlers.menu_handler import build_main_menu
-from bot.keyboards.profile_keyboard import get_profile_keyboard, get_profile_edit_keyboard
-from bot.state.user_state import UserState
-from bot.keyboards.catalog_keyboard import location_request_keyboard, catalog_menu_keyboard
-from bot.keyboards.product_keyboard import products_pagination_keyboard
-from bot.keyboards.start_keyboard import main_menu_keyboard, start_keyboard
-from bot.locale.get_lang import get_localized_text
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy import select
-import re
-
-PHONE_REGEX = re.compile(r"^\+998\d{9}$")
-EMAIL_REGEX = re.compile(r"^[\w\.-]+@[\w\.-]+\.\w{2,}$")
-
-
+from bot.database.db_config import async_session_maker
+from bot.database.models import UserTokens, UserLang
+from bot.keyboards.start_keyboard import start_keyboard
+from bot.locale.get_lang import get_localized_text
+from api.user import get_user_profile, update_user_profile, refresh_access_token, get_tokens_by_user_id
+from bot.handlers.register_handler import safe_delete
+from bot.state.user_state import UserState
 
 router = Router()
 
+
 @router.callback_query(F.data == "profile")
-async def profile_handler(callback: types.CallbackQuery, session: AsyncSession):
-    telegram_id = callback.from_user.id
-
-    result = await session.execute(
-        select(UserLang).where(UserLang.telegram_id == telegram_id)
-    )
-    user_lang = result.scalar_one_or_none()
-    lang = user_lang.lang if user_lang else "uz"
-
-    result = await session.execute(
-        select(User).where(User.telegram_id == telegram_id)
-    )
-    user = result.scalar_one_or_none()
-
-    if not user:
-        await callback.message.edit_text(
-            text=get_localized_text(lang, "profile.not_found"),
-            reply_markup=InlineKeyboardMarkup(
-                inline_keyboard=[
-                    [InlineKeyboardButton(
-                        text=get_localized_text(lang,"profile_buttons.back"),
-                        callback_data="back_profile"
-                    )]
-                ]
-            )
+async def show_profile(callback: types.CallbackQuery):
+    user_id = callback.from_user.id
+    bot = callback.bot
+    chat_id = callback.message.chat.id
+    await safe_delete(bot, chat_id, callback.message.message_id)
+    async with async_session_maker() as db:
+        result_lang = await db.execute(
+            select(UserLang).where(UserLang.telegram_id == user_id)
         )
+        user_lang = result_lang.scalar_one_or_none()
+        lang = user_lang.lang if user_lang else "uz"
+        result = await db.execute(
+            select(UserTokens).where(UserTokens.telegram_id == user_id)
+        )
+        tokens = result.scalar_one_or_none()
+    if not tokens:
+        await callback.message.answer(get_localized_text(lang, "profile.no_token"))
         return
-    text = (
-        f"{get_localized_text(lang, 'profile.title')}\n"
-        f"{get_localized_text(lang, 'profile.name').format(name=user.full_name)}\n"
-        f"{get_localized_text(lang, 'profile.contact').format(contact=user.phone)}\n"
-        f"{get_localized_text(lang, 'profile.email').format(email=user.email)}\n"
-        f"{get_localized_text(lang, 'profile.date').format(date=user.formatted_registered_at)}"
+    new_token_pack = await get_tokens_by_user_id(user_id)
+    if new_token_pack.get("success") and new_token_pack.get("access"):
+        access_token = new_token_pack["access"]
+        refresh_token = new_token_pack["refresh"]
+        async with async_session_maker() as session:
+            user_tokens = await session.execute(
+                select(UserTokens).where(UserTokens.telegram_id == user_id)
+            )
+            user_tokens = user_tokens.scalar_one_or_none()
+
+            if user_tokens:
+                user_tokens.access_token = access_token
+                user_tokens.refresh_token = refresh_token
+                await session.commit()
+    try:
+        profile_data = await get_user_profile(tokens.access_token)
+
+    except httpx.HTTPStatusError as e:
+        if e.response.status_code == 401:
+            new_tokens = await refresh_access_token(user_id)
+            if not new_tokens.get("success"):
+                await callback.message.answer(
+                    get_localized_text(lang, "profile.token_expired") + "\n\n/login"
+                )
+                return
+            new_access = new_tokens.get("access_token")
+            new_refresh = new_tokens.get("refresh_token")
+
+            async with async_session_maker() as db:
+                result = await db.execute(
+                    select(UserTokens).where(UserTokens.telegram_id == user_id)
+                )
+                db_tokens = result.scalar_one_or_none()
+
+                if db_tokens:
+                    db_tokens.access_token = new_access
+                    if new_refresh:
+                        db_tokens.refresh_token = new_refresh
+                    await db.commit()
+
+            profile_data = await get_user_profile(new_access)
+
+        else:
+            await callback.message.answer(
+                get_localized_text(lang, "profile.error").format(error=e.response.text)
+            )
+            return
+
+    user = profile_data.get("data", {})
+
+    first_name = user.get("first_name", "-")
+    last_name = user.get("last_name", "-")
+    birth_date = user.get("birth_date", "-")
+
+    email = user.get("email")
+    phone = user.get("phone_number")
+
+    text = f"👤 <b>{get_localized_text(lang, 'profile.title')}</b>\n\n"
+    text += f"👤 <b>{get_localized_text(lang, 'profile.first_name')}</b>: {first_name}\n"
+    text += f"👤 <b>{get_localized_text(lang, 'profile.last_name')}</b>: {last_name}\n"
+    text += f"🎂 <b>{get_localized_text(lang, 'profile.birth_date')}</b>: {birth_date}\n"
+
+    if email:
+        text += f"📧 <b>{get_localized_text(lang, 'profile.email')}</b>: {email}\n"
+    if phone:
+        text += f"📱 <b>{get_localized_text(lang, 'profile.phone')}</b>: {phone}\n"
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text=get_localized_text(lang, "profile.edit"),
+                    callback_data="edit_profile",
+                ),
+                InlineKeyboardButton(
+                    text=get_localized_text(lang, "profile.change_lang"),
+                    callback_data="change_lang",
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text=get_localized_text(lang, "menu.back"),
+                    callback_data="back_to_main_menu",
+                )
+            ],
+        ]
     )
 
-    await callback.message.edit_text(text=text, reply_markup=get_profile_keyboard(lang))
+    await callback.message.answer(text, parse_mode="HTML", reply_markup=keyboard)
 
-@router.callback_query(F.data == "back_profile")
-async def back_handler(callback: types.CallbackQuery):
-    telegram_id = callback.from_user.id
 
+
+@router.callback_query(F.data == "change_lang")
+async def change_lang_from_profile(callback: types.CallbackQuery):
+    user_id = callback.from_user.id
     async with async_session_maker() as session:
         result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id == telegram_id)
+            select(UserLang).where(UserLang.telegram_id == user_id)
         )
         user_lang = result.scalar_one_or_none()
         lang = user_lang.lang if user_lang else "uz"
+    try:
+        await callback.message.delete()
+    except Exception:
+        pass
 
-        print("🔍 LOADED LANG:", lang)  # теперь точно увидишь язык
-
-    kb = await build_main_menu(telegram_id, lang)
-
-    await callback.message.edit_text(
-        text=get_localized_text(lang, "menu.title"),
-        reply_markup=kb
-    )
-    await callback.answer()
-
-@router.callback_query(F.data == "change_lang")
-async def change_lang_handler(callback: types.CallbackQuery, state: FSMContext):
-    await state.set_state(UserState.choose_language)
-
-    lang = 'uz'
-    async with async_session_maker() as session:
-        result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id == callback.from_user.id)
-        )
-        user_lang = result.scalars().first()
-        if user_lang:
-            lang = user_lang.lang
-
-    await callback.message.edit_text(
-        get_localized_text(lang, 'start.choose_language'),
+    await callback.message.answer(
+        get_localized_text(lang, "start.choose_language"),
         reply_markup=start_keyboard()
     )
+
     await callback.answer()
 
 
 @router.callback_query(F.data == "edit_profile")
-async def edit_profile_handler(callback: types.CallbackQuery, state: FSMContext):
-    telegram_id = callback.from_user.id
+async def edit_profile_menu(callback: types.CallbackQuery, state: FSMContext):
+    user_id = callback.from_user.id
 
-    async with async_session_maker() as session:
-        result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id == telegram_id)
-        )
-        user_lang = result.scalar_one_or_none()
-        lang = user_lang.lang if user_lang else "uz"
+    async with async_session_maker() as db:
+        lang_obj = await db.execute(select(UserLang).where(UserLang.telegram_id == user_id))
+        lang_row = lang_obj.scalar_one_or_none()
+        lang = lang_row.lang if lang_row else "uz"
+
+        token_obj = await db.execute(select(UserTokens).where(UserTokens.telegram_id == user_id))
+        tokens = token_obj.scalar_one_or_none()
+
+    profile = await get_user_profile(tokens.access_token)
+    user = profile.get("data", {})
+
+    kb = InlineKeyboardBuilder()
+
+    kb.button(text=get_localized_text(lang, "profile.first_name"), callback_data="edit_first_name")
+    kb.button(text=get_localized_text(lang, "profile.last_name"), callback_data="edit_last_name")
+    kb.button(text=get_localized_text(lang, "profile.birth_date"), callback_data="edit_birth_date")
+    kb.button(text=get_localized_text(lang, "profile_edit.password"), callback_data="edit_password")
+    kb.button(text=get_localized_text(lang, "menu.back"), callback_data="profile")
+    kb.adjust(2, 2, 2, 1)
 
     await callback.message.edit_text(
-        text=get_localized_text(lang, "profile_edit.choose_field"),
-        reply_markup=get_profile_edit_keyboard(lang)
+        get_localized_text(lang, "profile_edit.choose_field"),
+        reply_markup=kb.as_markup()
     )
     await callback.answer()
 
-@router.callback_query(F.data == "edit_name")
-async def edit_name_callback(callback: types.CallbackQuery, state: FSMContext):
-    async with async_session_maker() as session:
-        result = await session.execute(select(UserLang).where(UserLang.telegram_id == callback.from_user.id))
+
+
+@router.callback_query(F.data.startswith("edit_"))
+async def edit_field_callback(callback: types.CallbackQuery, state: FSMContext):
+    field = callback.data.replace("edit_", "")
+    user_id = callback.from_user.id
+
+    async with async_session_maker() as db:
+        result = await db.execute(select(UserLang).where(UserLang.telegram_id == user_id))
         user_lang = result.scalar_one_or_none()
         lang = user_lang.lang if user_lang else "uz"
 
-    await state.set_state(UserState.editing_name)
-    await callback.message.edit_text(
-        text=get_localized_text(lang, "profile_edit.enter_name")
-    )
+    await state.set_state(UserState.editing_field)
+    await state.update_data(field=field)
+
+    field_texts = {
+        "first_name": "profile_edit.enter_first_name",
+        "last_name": "profile_edit.enter_last_name",
+        "email": "profile_edit.enter_email",
+        "birth_date": "profile_edit.enter_birth_date",
+        "phone": "profile_edit.enter_phone",
+        "password": "profile_edit.enter_password",
+    }
+
+    await callback.message.edit_text(get_localized_text(lang, field_texts[field]))
     await callback.answer()
 
-@router.message(UserState.editing_name)
-async def save_name(message: types.Message, state: FSMContext):
-    new_name = message.text
+
+@router.message(UserState.editing_field)
+async def save_edited_field(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
+    new_value = message.text
+    data = await state.get_data()
+    field = data.get("field")
 
-    async with async_session_maker() as session:
-        result = await session.execute(select(User).where(User.telegram_id == user_id))
-        user = result.scalar_one_or_none()
-        if user:
-            user.full_name = new_name
-            await session.commit()
+    async with async_session_maker() as db:
+        result = await db.execute(select(UserTokens).where(UserTokens.telegram_id == user_id))
+        tokens = result.scalar_one_or_none()
 
-    await state.clear()
-
-    async with async_session_maker() as session:
-        result = await session.execute(select(UserLang).where(UserLang.telegram_id == user_id))
-        user_lang = result.scalar_one_or_none()
+        result2 = await db.execute(select(UserLang).where(UserLang.telegram_id == user_id))
+        user_lang = result2.scalar_one_or_none()
         lang = user_lang.lang if user_lang else "uz"
 
-    await message.answer(
-        get_localized_text(lang, "profile_edit.updated_name"),
-        reply_markup=get_profile_edit_keyboard(lang)
-    )
-
-@router.callback_query(F.data == "back_profile_show")
-async def back_from_edit_profile(callback: types.CallbackQuery, session: AsyncSession):
-    telegram_id = callback.from_user.id
-
-    result = await session.execute(
-        select(UserLang).where(UserLang.telegram_id == telegram_id)
-    )
-    user_lang = result.scalar_one_or_none()
-    lang = user_lang.lang if user_lang else "uz"
-
-    result = await session.execute(
-        select(User).where(User.telegram_id == telegram_id)
-    )
-    user = result.scalar_one_or_none()
-
-    if not user:
-        await callback.message.edit_text(
-            get_localized_text(lang, "profile.not_found"),
-            reply_markup=InlineKeyboardMarkup(
-                inline_keyboard=[
-                    [InlineKeyboardButton(
-                        text=get_localized_text(lang,"profile_buttons.back"),
-                        callback_data="back_profile"
-                    )]
-                ]
-            )
-        )
+    if not tokens:
+        await message.answer(get_localized_text(lang, "profile.no_token"))
         return
 
-    text = (
-        f"{get_localized_text(lang, 'profile.title')}\n"
-        f"{get_localized_text(lang, 'profile.name').format(name=user.full_name)}\n"
-        f"{get_localized_text(lang, 'profile.contact').format(contact=user.phone)}\n"
-        f"{get_localized_text(lang, 'profile.email').format(email=user.email)}\n"
-        f"{get_localized_text(lang, 'profile.date').format(date=user.formatted_registered_at)}"
-    )
+    try:
+        payload = {field: new_value}
+        resp = await update_user_profile(tokens.access_token, payload)
 
-    await callback.message.edit_text(
-        text=text,
-        reply_markup=get_profile_keyboard(lang)
-    )
-    await callback.answer()
-
-
-@router.callback_query(F.data == "edit_phone")
-async def edit_phone_callback(callback: types.CallbackQuery, state: FSMContext):
-    async with async_session_maker() as session:
-        result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id == callback.from_user.id)
-        )
-        user_lang = result.scalar_one_or_none()
-        lang = user_lang.lang if user_lang else "uz"
-
-    await state.set_state(UserState.editing_phone)
-    await callback.message.edit_text(
-        text=get_localized_text(lang, "profile_edit.enter_phone")
-    )
-    await callback.answer()
-
-
-@router.message(UserState.editing_phone)
-async def save_phone(message: types.Message, state: FSMContext):
-    new_phone = message.text
-    user_id = message.from_user.id
-
-    if not PHONE_REGEX.match(new_phone):
-        async with async_session_maker() as session:
-            result = await session.execute(
-                select(UserLang).where(UserLang.telegram_id == user_id)
-            )
-            user_lang = result.scalar_one_or_none()
-            lang = user_lang.lang if user_lang else "uz"
-
-        await message.answer(
-            get_localized_text(lang, "profile_edit.invalid_phone")
-        )
-        return
-
-
-    async with async_session_maker() as session:
-        result = await session.execute(select(User).where(User.telegram_id == user_id))
-        user = result.scalar_one_or_none()
-        if user:
-            user.phone = new_phone
-            await session.commit()
+        if resp.get("success"):
+            kb = InlineKeyboardBuilder()
+            kb.button(text=get_localized_text(lang, "menu.back"), callback_data="profile")
+            await message.answer(get_localized_text(lang, "profile_edit.updated_field"), reply_markup=kb.as_markup())
+        else:
+            await message.answer(get_localized_text(lang, "profile.error").format(error=resp))
+    except httpx.HTTPStatusError as e:
+        await message.answer(get_localized_text(lang, "profile.error").format(error=e.response.text))
 
     await state.clear()
-
-    async with async_session_maker() as session:
-        result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id == user_id)
-        )
-        user_lang = result.scalar_one_or_none()
-        lang = user_lang.lang if user_lang else "uz"
-
-    await message.answer(
-        get_localized_text(lang, "profile_edit.updated_phone"),
-        reply_markup=get_profile_edit_keyboard(lang)
-    )
-
-
-@router.callback_query(F.data == "edit_email")
-async def edit_email_callback(callback: types.CallbackQuery, state: FSMContext):
-    async with async_session_maker() as session:
-        result = await session.execute(select(UserLang).where(UserLang.telegram_id == callback.from_user.id))
-        user_lang = result.scalar_one_or_none()
-        lang = user_lang.lang if user_lang else "uz"
-
-    await state.set_state(UserState.editing_email)
-    await callback.message.edit_text(
-        text=get_localized_text(lang, "profile_edit.enter_email")
-    )
-    await callback.answer()
-
-
-@router.message(UserState.editing_email)
-async def save_email(message: types.Message, state: FSMContext):
-    new_email = message.text
-    user_id = message.from_user.id
-
-    if not EMAIL_REGEX.match(new_email):
-        async with async_session_maker() as session:
-            result = await session.execute(
-                select(UserLang).where(UserLang.telegram_id == user_id)
-            )
-            user_lang = result.scalar_one_or_none()
-            lang = user_lang.lang if user_lang else "uz"
-
-        await message.answer(
-            get_localized_text(lang, "profile_edit.invalid_email")
-        )
-        return
-
-    async with async_session_maker() as session:
-        result = await session.execute(select(User).where(User.telegram_id == user_id))
-        user = result.scalar_one_or_none()
-        if user:
-            user.email = new_email
-            await session.commit()
-
-    await state.clear()
-
-    async with async_session_maker() as session:
-        result = await session.execute(
-            select(UserLang).where(UserLang.telegram_id == user_id)
-        )
-        user_lang = result.scalar_one_or_none()
-        lang = user_lang.lang if user_lang else "uz"
-
-    await message.answer(
-        get_localized_text(lang, "profile_edit.updated_email"),
-        reply_markup=get_profile_edit_keyboard(lang)
-    )
-
-
-
-

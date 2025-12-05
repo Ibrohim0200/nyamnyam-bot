@@ -4,19 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="asd">
+    <list default="true" id="25ea9270-e7e4-425e-a900-3bb1864643b1" name="Changes" comment="siuuu">
+      <change afterPath="$PROJECT_DIR$/bot/handlers/register_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/PythonProject4.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonProject4.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/product_api.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/product_api.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/database/create_tables.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/database/db_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/db_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/database/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/database/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/database/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/cart_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/cart_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/catalog_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/catalog_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot/handlers/language_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/language_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/menu_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/menu_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/order_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/order_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/handlers/orders_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/orders_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/product_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/product_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/profile_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/profile_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bot/handlers/start_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/handlers/start_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/catalog_keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/catalog_keyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/orders_keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/orders_keyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/keyboards/start_keyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/keyboards/start_keyboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/locale/langs/en.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/en.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/locale/langs/ru.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/ru.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/locale/langs/uz.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/locale/langs/uz.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bot/state/user_state.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot/state/user_state.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +56,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Ibrohim0200/nyamnyam-bot.git&quot;,
-    &quot;accountId&quot;: &quot;135923a0-ec3c-4102-85cc-209fc3116119&quot;
+    &quot;accountId&quot;: &quot;5dddb84b-aa9c-4742-9f8d-8106ad7bc2d5&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -79,7 +93,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="PythonProject4" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -101,16 +115,11 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-fb887030ada0-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.21565.199" />
+        <option value="bundled-python-sdk-598b0484d0b5-e2d783800521-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-251.26927.74" />
       </set>
     </attachedChunks>
   </component>

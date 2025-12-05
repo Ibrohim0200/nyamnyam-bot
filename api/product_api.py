@@ -6,33 +6,49 @@ load_dotenv()
 
 BASE_URL = os.getenv("BASE_URL")
 
-async def fetch_surprise_bag():
+async def fetch_surprise_bag(locale: str = "uz"):
     url = f"{BASE_URL}bot/surprise-bag/"
+    headers = {"Accept-Language": locale}
     async with httpx.AsyncClient() as client:
-        resp = await client.get(url, timeout=10.0)
+        resp = await client.get(url, headers=headers, timeout=10.0)
         resp.raise_for_status()
         data = resp.json()
         return data.get("data", {})
 
-async def fetch_categories():
+async def fetch_categories(locale: str = "uz"):
     url = f"{BASE_URL}bot/category/"
+    headers = {"Accept-Language": locale}
     async with httpx.AsyncClient() as client:
-        resp = await client.get(url, timeout=10.0)
+        resp = await client.get(url, headers=headers, timeout=10.0)
         resp.raise_for_status()
         data = resp.json()
         return data.get("data", [])
 
 
-async def fetch_surprise_bag_by_category(slug: str):
+async def fetch_surprise_bag_by_category(slug: str, locale: str = "uz"):
     slug = slug.replace(" ", "-").lower()
     url = f"{BASE_URL}bot/surprise-bag/category/?slug={slug}"
-
+    headers = {"Accept-Language": locale}
     async with httpx.AsyncClient() as client:
         try:
-            resp = await client.get(url, timeout=10.0)
+            resp = await client.get(url, headers=headers, timeout=10.0)
             data = resp.json()
             value = data.get("data", None)
             return value if isinstance(value, list) else []
         except Exception as e:
             print(f"❌ HTTP xato: {e}")
             return []
+
+
+async def fetch_product_detail(id: str, locale: str = "uz"):
+    url = f"{BASE_URL}bot/surprise-bag/{id}/"
+
+    headers = {
+        "Accept-Language": locale
+    }
+
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        resp = await client.get(url, headers=headers)
+        resp.raise_for_status()
+        data = resp.json()
+        return data.get("data", {})

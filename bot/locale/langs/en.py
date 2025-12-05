@@ -5,104 +5,141 @@ texts = {
     },
 
     "menu": {
-        "main": "🏠 Main Menu",
+        "main": "🏠 Main menu",
         "catalog_clicked": "📦 Catalog opened",
-        "login_clicked": "🔑 Login selected",
-        "register_clicked": "📝 Register selected",
+        "login_clicked": "🔑 Login",
+        "register_clicked": "📝 Register",
         "back": "↩️ Back",
-        "back_to_catalog": "↩️ Back to Catalog",
+        "back_to_catalog": "↩️ Back to catalog",
         "cart": "Cart",
-        "title": "🗂 Main Menu",
+        "title": "🗂 Menu",
         "catalog": "📦 Catalog",
         "profile": "Profile",
         "orders": "My Orders",
         "help": "Help",
     },
 
+    "register": {
+        "ask_contact": "📧 Please enter your email or phone number:",
+        "invalid_format": "⚠️ Invalid format! Please enter a correct email or phone number.",
+        "sending": "⏳ Sending data, please wait...",
+        "enter_otp": "🔢 Please enter the 4-digit code sent to you:",
+        "otp_invalid": "⚠️ Invalid OTP format (4 digits required). Try again.",
+        "verifying": "⏳ Verifying code...",
+        "verified": "✅ Verified! You are logged in.",
+        "verify_failed": "❌ {error} Try again:",
+        "server_error": "❌ Server error (code: {code}).\n{error}",
+        "exception": "🚫 You are already registered. Please login.",
+        "ask_password": "Please enter a new password:",
+        "ask_first_name": "Please enter your first name:",
+        "name_empty": "Name cannot be empty.",
+        "password_empty": "Password cannot be empty.",
+        "success": "✅ You have successfully registered!",
+        "password_failed": "An error occurred"
+    },
+
+    "login": {
+        "ask_contact": "📧 Please enter your registered email or phone number:",
+        "ask_password": "🔑 Please enter your password:",
+        "sending": "⏳ Sending data, please wait...",
+        "success": "✅ You have successfully logged in!",
+        "failed": "❌ Login error: {error}",
+        "exception": "🚫 Incorrect login or password"
+    },
 
     "catalog": {
-        "send_location": "Send your location to show the distance to products.",
-        "location": "📍 Send location",
+        "send_location": "To show product distances, please send your location.",
+        "location": "📍 Share Location",
         "location_saved": "📍 Location saved!",
-        "choose_category": "Select the desired section from the catalog:",
+        "choose_category": "Select a category from the catalog:",
         "empty": "No products found in this category.",
         "category_title": "{cat} category",
         "superbox": "Surprise Bag",
         "update_location": "📍 Update Location",
         "fetch_error": "❌ Error while fetching data:",
-        "api_error": "❌ Invalid response from API. Please contact the admin.",
+        "api_error": "❌ Invalid response from API. Contact the admin.",
         "superbox_title": "🎁 Surprise Bag",
-        "empty_superbox": "❌ No products available in this section.",
-        "choose_superbox_section": "🎁 Choose a Surprise bag section:",
+
+        "empty_superbox": "❌ No products available in any section.",
+        "choose_superbox_section": "🎁 Choose a Surprise Bag section:",
         "section_popular": "Popular",
         "section_recommended": "Recommended",
         "section_new": "New",
         "section_tomorrow": "Tomorrow",
-        "section_collect_for_now": "Collect for now",
+        "section_collect_for_now": "Available Now",
         "section_morning": "Morning",
         "section_afternoon": "Afternoon",
         "section_evening": "Evening",
     },
 
-
-
     "product": {
+        "max_qty": "❗ Cannot exceed {max_count}!",
+        "description": "description",
         "price": "Price",
         "quantity": "Quantity",
         "distance": "Distance",
         "rating": "Rating",
-        "pickup_time": "Pickup time",
+        "pickup_time": "Pickup window",
         "branch": "Branch",
-        "add_to_cart": "🛒 Add to Cart",
+        "add_to_cart": "🛒 Add to cart",
         "increase": "➕ Increase",
         "decrease": "➖ Decrease",
-        "back_to_list": "↩️ Back to List",
+        "back_to_list": "↩️ Back to list",
         "not_found": "Product not found"
     },
 
-
     "cart": {
-        "empty": "🛒 Cart is empty.",
+        "empty": "🛒 Your cart is empty.",
         "warning": "❗ Quantity cannot be less than 1",
-        "empty_hint": "No products have been added yet.",
-        "title": "🛒 Products in Cart",
+        "empty_hint": "No items added yet.",
+        "title": "🛒 Items in your cart",
         "view": "🛒 Cart",
         "total": "Total",
-        "grand_total": "Grand Total",
+        "grand_total": "Grand total",
         "checkout": "✅ Checkout",
         "clear": "🗑 Clear",
-        "added": "✅ Product added to cart",
+        "added": "✅ Item added to cart",
         "delete_confirm": "will be deleted.",
         "no_undo": "This action cannot be undone.",
         "delete": "❌ Delete",
         "delete_yes": "✅ Yes",
-        "delete_no": "❌ No",
-        "qty_increased": "{product} quantity increased to {quantity}",
-        "qty_decreased": "{product} quantity decreased to {quantity}",
-        "item_removed": "❌ {product} removed from cart",
-        "view_cart": "🛒 Cart",
+        "delete_no": "❌ No"
     },
 
-
-
+    "order": {
+        "summary": "📝 Order details",
+        "confirm": "✅ Confirm",
+        "success": "✅ Your order has been successfully placed!",
+        "payment_process": "Payment process",
+        "payment_hint": "Click the button below to make a payment:",
+        "payment_button": "💳 Pay",
+        "payment_redirect": "✅ Order created.\nNow please make the payment:",
+        "error": "❌ Error while creating order.",
+        "pay": "Pay",
+        "payment_click": "💳 Click",
+        "payment_payme": "💳 Payme",
+    },
 
     "pagination": {
         "prev": "⬅️ Previous",
         "next": "Next ➡️",
         "page": "Page {page}",
-        "choose_language": "Choose a language 👇",
-        "language_selected": "You have selected English ✅"
     },
 
-
-
     "profile": {
-        "title": "👤 Profile information:",
-        "name": "- Name: {name}",
-        "contact": "- Phone: {contact}",
-        "email": "- Email: {email}",
-        "date": "- Registered on: {date}",
-        "not_found": "❌ Your profile was not found. Please register."
+        "title": "Profile information",
+        "id": "User ID",
+        "first_name": "First name",
+        "last_name": "Last name",
+        "email": "Email",
+        "birth_date": "Birth date",
+        "phone": "Phone number",
+        "token_expired": "🔐 Token expired, please login again.",
+        "no_token": "❌ You are not logged in.",
+        "error": "🚫 Error occurred: {error}",
+        "edit": "✏️ Edit profile",
+        "change_lang": "🌐 Change language",
+        "changed_lang": "✅ Language successfully changed!",
     },
 
     "profile_buttons": {
@@ -112,72 +149,44 @@ texts = {
     },
 
     "profile_edit": {
-    "choose_field": "Select the information you want to change:",
-    "enter_name": "✏️ Enter a new name:",
-    "enter_phone": "📱 Enter your new phone number in the format +998XXXXXXXXX:",
-    "enter_email": "📧 Enter a new email address:",
-    "enter_password": "🔑 Enter a new password:",
-
-    "updated_name": "✅ Name updated successfully",
-    "updated_phone": "✅ Phone number updated successfully",
-    "updated_email": "✅ Email updated successfully",
-    "updated_password": "✅ Password updated successfully",
-
-    "name": "Change name",
-    "phone": "Change phone",
-    "email": "Change email",
-    "back": "↩️ Back",
-
-    "invalid_phone": "❌ Invalid phone number. Correct format: +998901234567"
-},
-
+        "choose_field": "Which information would you like to edit?",
+        "enter_first_name": "✏️ Enter your new first name:",
+        "enter_last_name": "✏️ Enter your new last name:",
+        "enter_email": "📧 Enter your new email:",
+        "enter_birth_date": "🎂 Enter your birthdate (YYYY-MM-DD):",
+        "enter_phone": "📱 Enter your new phone number:",
+        "enter_password": "🔐 Enter your new password:",
+        "updated_field": "✅ Information updated successfully!",
+        "password": "🔐 Password"
+    },
 
     "orders": {
-        "empty": "❌ You don’t have any orders yet.",
         "title": "📦 Your orders:",
-        "id": "🆔 Order ID",
-        "price": "💰 Price",
-        "date": "📅 Date",
-        "status": "📌 Status",
-        "pickup_time": "⏰ Pickup time",
-        "branch": "🏢 Branch",
-        "distance": "📍 Distance from you",
-        "select_number": "Click on a number to view details",
-        "detail_title": "Order details",
-        "next": "Next",
+        "empty": "📭 You have no orders yet.",
+        "status": "Status",
+        "pickup_date": "Pickup date",
+        "pickup_time": "Pickup time",
+        "branch": "Branch",
+        "select_number": "Tap one of the following numbers",
         "back": "Back",
-        "menu": "Menu",
-        "items": "📦 Order items",
-        "item_line": "- {product_name} x {quantity} = {price} UZS",
-        "total_price": "Total:",
-        "currency": "UZS",
-        "payment_status_text": "Payment status: {payment_status}",
-        "pickup_status_text": "Pickup status: {pickup_status}",
-        "branch_info": "Branch: {branch_name}",
-        "pickup_time_text": "Pickup time: {pickup_time}",
-        "no_items": "❌ No items in this order",
+        "next": "Next",
+        "menu": "Return to menu",
+        "detail_title": "Order details",
+        "total_price": "Total price",
+        "history_empty": "Order history is empty.",
+        "history_title": "Order history",
+        "date": "Date",
+        "qr": "QR code",
     },
-
-
-    "order": {
-        "summary": "📝 Order summary",
-        "confirm": "✅ Confirm",
-        "success": "✅ Your order has been placed successfully!",
-        "payment_process": "Payment process",
-        "payment_hint": "To make the payment, please click the button below:",
-        "payment_button": "💳 Pay now",
-    },
-
 
     "order_status": {
-        "paid": "✅ Paid",
-        "picked_up": "📦 Picked up",
-        "cancelled": "❌ Cancelled",
-        "pending": "⏳ Pending",
-        "unknown": "❓ Unknown",
+        "pending": "⌛ In progress",
+        "ready": "✅ Ready",
+        "cancelled": "Cancelled",
+        "unknown": "Unknown"
     },
 
     "help": {
-        "text": "📧 Email: {email}\nSend your question to this email.\nOur team will contact you as soon as possible."
+        "text": "📧 Email: {email}\nPlease send your questions to this email address.\nOur team will contact you as soon as possible."
     }
 }

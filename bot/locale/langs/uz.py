@@ -7,16 +7,45 @@ texts = {
     "menu": {
         "main": "🏠 Asosiy menyu",
         "catalog_clicked": "📦 Katalog ochildi",
-        "login_clicked": "🔑 Login tanlandi",
-        "register_clicked": "📝 Register tanlandi",
+        "login_clicked": "🔑 Login",
+        "register_clicked": "📝 Register",
         "back": "↩️ Ortga",
         "back_to_catalog": "↩️ Katalogga qaytish",
         "cart": "Savat",
-        "title": "🗂 Asosiy menyu",
+        "title": "🗂 Menyu",
         "catalog": "📦 Katalog",
         "profile": "Profil",
         "orders": "Buyurtmalarim",
         "help": "Yordam",
+    },
+
+    "register": {
+        "ask_contact": "📧 Iltimos, email yoki telefon raqamingizni kiriting:",
+        "ask_phone": "Telefon raqamni yuborish",
+        "invalid_format": "⚠️ Noto‘g‘ri format! Iltimos, to‘g‘ri email yoki telefon raqamini kiriting.",
+        "sending": "⏳ Ma’lumot yuborilmoqda, biroz kuting...",
+        "enter_otp": "🔢 Iltimos, sizga yuborilgan 4 xonali kodni kiriting:",
+        "otp_invalid": "⚠️ OTP noto‘g‘ri formatda (4 ta raqam kerak). Qaytadan urinib ko‘ring.",
+        "verifying": "⏳ Kod tekshirilmoqda...",
+        "verified": "✅ Tasdiqlandi! Siz tizimga kirdingiz.",
+        "verify_failed": "❌ {error} Qayta urunib koring:",
+        "server_error": "❌ Siz avval ro'yhatdan o'tgansiz, login qiling\n",
+        "exception": "🚫 Siz allaqachon ro'yxatdan o'tgansiz login qiling",
+        "ask_password": "Iltimos, yangi parol kiriting:",
+        "ask_first_name": "Iltimos, ismingizni kiriting:",
+        "name_empty": "Ism bo'sh bo'lmasin.",
+        "password_empty": "Parol bo‘sh bo‘lishi mumkin emas.",
+        "success": "✅ Siz muvaffaqiyatli ro‘yxatdan o‘tdingiz!",
+        "password_failed": "Xatolik yuz berdi"
+    },
+
+    "login": {
+        "ask_contact": "📧 Iltimos, ro‘yxatdan o‘tgan email yoki telefon raqamingizni kiriting:",
+        "ask_password": "🔑 Iltimos, parolingizni kiriting:",
+        "sending": "⏳ Ma’lumot yuborilmoqda, biroz kuting...",
+        "success": "✅ Siz muvaffaqiyatli tizimga kirdingiz!",
+        "failed": "❌ Login xato: {error}",
+        "exception": "🚫 Login yoki parol noto‘g‘ri"
     },
 
     "catalog": {
@@ -45,6 +74,8 @@ texts = {
     },
 
     "product": {
+        "max_qty": "❗ {max_count} dan ko‘p bo‘lishi mumkin emas!",
+        "description": "Tavsifi",
         "price": "Narx",
         "quantity": "Miqdor",
         "distance": "Masofa",
@@ -83,6 +114,11 @@ texts = {
         "payment_process": "To‘lov qilish jarayoni",
         "payment_hint": "To‘lovni amalga oshirish uchun quyidagi tugmani bosing:",
         "payment_button": "💳 To‘lov qilish",
+        "payment_redirect": "✅ Buyurtma muvaffaqiyatli yaratildi.\nEndi to‘lovni amalga oshiring:",
+        "error": "❌ Buyurtma yaratishda xatolik yuz berdi.",
+        "pay": "To'lash",
+        "payment_click": "💳 Click",
+        "payment_payme": "💳 Payme",
     },
 
     "pagination": {
@@ -92,13 +128,22 @@ texts = {
     },
 
     "profile": {
-        "title": "👤 Profil ma’lumotlari:",
-        "name": "- Ism: {name}",
-        "contact": "- Telefon: {contact}",
-        "email":"- Email: {email}",
-        "date": "- Ro‘yxatdan o‘tgan sana: {date}",
-        "not_found": "❌ Sizning profilingiz topilmadi. Ro‘yxatdan o‘ting."
+        "title": "Profil ma'lumotlari",
+        "id": "Foydalanuvchi ID",
+        "first_name": "Ism",
+        "last_name": "Familiya",
+        "email": "Email",
+        "birth_date": "Tug'ilgan sana",
+        "phone": "Telefon raqami",
+        "token_expired": "🔐 Token eskirgan, qaytadan login qiling.",
+        "no_token": "❌ Siz hali login qilmagansiz.",
+        "error": "🚫 Xatolik yuz berdi: {error}",
+        "edit": "✏️ Profilni tahrirlash",
+        "change_lang": "🌐 Tilni o‘zgartirish",
+        "changed_lang": "✅ Til muvaffaqiyatli o‘zgartirildi!",
+
     },
+
 
     "profile_buttons": {
         "edit": "✏️ Ma’lumotlarni tahrirlash",
@@ -107,60 +152,43 @@ texts = {
     },
 
     "profile_edit": {
-    "choose_field": "Qaysi ma’lumotni o‘zgartirmoqchisiz?",
-    "enter_name": "✏️ Yangi ismni kiriting:",
-    "enter_phone": "📱 Yangi telefon raqamingizni +998XXXXXXXXX formatida kiriting:",
-    "enter_email": "📧 Yangi elektron pochtangizni kiriting:",
-    "enter_password": "🔑 Yangi parolni kiriting:",
+        "choose_field": "Qaysi ma’lumotni tahrir qilmoqchisiz?",
+        "enter_first_name": "✏️ Yangi ismingizni kiriting:",
+        "enter_last_name": "✏️ Yangi familiyangizni kiriting:",
+        "enter_email": "📧 Yangi email manzilingizni kiriting:",
+        "enter_birth_date": "🎂 Tug‘ilgan sanangizni kiriting (YYYY-MM-DD):",
+        "enter_phone": "📱 Yangi telefon raqamingizni kiriting:",
+        "enter_password": "🔐 Yangi parolingizni kiriting:",
+        "updated_field": "✅ Ma’lumot muvaffaqiyatli yangilandi!",
+        "password": "🔐 Parol"
+    },
 
-    "updated_name": "✅ Ism muvaffaqiyatli yangilandi",
-    "updated_phone": "✅ Telefon raqami muvaffaqiyatli yangilandi",
-    "updated_email": "✅ Elektron pochta muvaffaqiyatli yangilandi",
-    "updated_password": "✅ Parol muvaffaqiyatli yangilandi",
 
-    "name": "Ismni o‘zgartirish",
-    "phone": "Telefonni o‘zgartirish",
-    "email": "Emailni o‘zgartirish",
-    "back": "↩️ Ortga",
-
-    "invalid_phone": "❌ Telefon raqami noto‘g‘ri. To‘g‘ri format: +998901234567"
-},
-
-"orders": {
-    "empty": "❌ Sizda hali buyurtmalar yo‘q.",
-    "title": "📦 Sizning buyurtmalaringiz:",
-    "id": "🆔 Buyurtma ID",
-    "price": "💰 Narxi",
-    "date": "📅 Sana",
-    "status": "📌 Holati",
-    "pickup_time": "⏰ Olib ketish vaqti",
-    "branch": "🏢 Filial",
-    "distance": "📍 Sizdan masofa",
-    "select_number": "Raqamni bosing va batafsil ma’lumotni ko‘ring",
-    "detail_title": "Buyurtma tafsilotlari",
-    "next" : "Oldiga",
-    "back" : "Orqaga",
-    "menu" : "Menu",
-    "items": "📦 Buyurtma tarkibi",
-    "item_line": "- {product_name} x {quantity} = {price} UZS",
-    "total_price": "Jami:",
-    "currency" : "so‘m",
-    "payment_status_text": "To‘lov holati: {payment_status}",
-    "pickup_status_text": "Olib ketish holati: {pickup_status}",
-    "branch_info": "Filial: {branch_name}",
-    "pickup_time_text": "Olib ketish vaqti: {pickup_time}",
-    "no_items": "❌ Buyurtmada mahsulotlar mavjud emas"
-},
-"order_status": {
-    "paid": "✅ To‘langan",
-    "picked_up": "📦 Olib ketilgan",
-    "cancelled": "❌ Bekor qilingan",
-    "pending": "⏳ Kutmoqda",
-    "unknown": "❓ Noma’lum",
-},
+    "orders": {
+        "title": "📦 Sizning buyurtmalaringiz:",
+        "empty": "📭 Sizda hali buyurtmalar mavjud emas.",
+        "status": "Holati",
+        "pickup_date": "Olish sanasi",
+        "pickup_time": "Olib ketish vaqti",
+        "branch": "Filial",
+        "select_number": "Quyidagi raqamlardan birini bosing",
+        "back": "Orqaga",
+        "next": "Keyingi",
+        "menu": "Menyuga qaytish",
+        "detail_title": "Buyurtma tafsilotlari",
+        "total_price": "Umumiy summa",
+        "history_empty": "Buyurtmalar tarixi mavjud emas.",
+        "history_title": "Buyurtmalar tarixi",
+        "date": "Sana",
+        "qr": "QR kod",
+    },
+    "order_status": {
+        "pending": "⌛ Jarayonda",
+        "ready": "✅ Tayyor",
+        "cancelled": "Bekor qilingan",
+        "unknown": "Noma'lum"
+    },
     "help": {
         "text": "📧 Email: {email}\nSavolingizni shu email manziliga yozib yuboring.\nJamoamiz imkon qadar tez siz bilan bog‘lanadi."
-
-}
-
+    }
 }

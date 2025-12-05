@@ -14,8 +14,7 @@ def start_keyboard():
 def main_menu_keyboard(lang: str, user_id: int):
     kb = InlineKeyboardBuilder()
     kb.button(text=get_localized_text(lang, "menu.catalog"), callback_data="catalog")
-    kb.button(text=get_localized_text(lang, "menu.login_clicked"), url=f"{BASE_URL}users/auth/login/?user_id={user_id}")
-    kb.button(text=get_localized_text(lang, "menu.register_clicked"), url=f"{BASE_URL}users/auth/register/?user_id={user_id}")
-    kb.button(text="⚙️ Test", callback_data="test")
+    kb.button(text=get_localized_text(lang, "menu.login_clicked"), callback_data="login")
+    kb.button(text=get_localized_text(lang, "menu.register_clicked"), callback_data="register")
     kb.adjust(1)
     return kb.as_markup()

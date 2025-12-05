@@ -1,4 +1,5 @@
 import asyncio
+from calendar import weekday
 
 import httpx
 from aiogram import Router, F, types
@@ -7,7 +8,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from urllib.parse import quote
 
-from api.product_api import fetch_surprise_bag, fetch_surprise_bag_by_category
+from sqlalchemy import select
+
+from api.product_api import fetch_surprise_bag, fetch_surprise_bag_by_category, fetch_product_detail
+from bot.database.models import UserTokens
+from bot.handlers.menu_handler import build_main_menu
 from bot.keyboards.catalog_keyboard import catalog_menu_keyboard
 from bot.locale.get_lang import get_localized_text
 from bot.keyboards.start_keyboard import main_menu_keyboard
@@ -41,10 +46,11 @@ async def _is_image_url(url: str) -> bool:
     except Exception:
         return False
 
-async def show_products(message: Message, category: str, page: int, state: FSMContext, callback_query: CallbackQuery = None):
+async def show_products(message: Message, category: str, page: int, state: FSMContext, callback_query: CallbackQuery = None, lang: str = None):
     user_id = message.from_user.id
-    async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+    if not lang:
+        async with async_session_maker() as db:
+            lang = await get_user_lang(user_id)
 
     try:
         if category == "superbox":
@@ -53,15 +59,26 @@ async def show_products(message: Message, category: str, page: int, state: FSMCo
             await state.update_data(superbox_items=items)
         else:
             slug = category.replace(" ", "-").lower()
-            items = await fetch_surprise_bag_by_category(slug)
+            items = await fetch_surprise_bag_by_category(slug, locale=lang)
             await state.update_data(**{f"{category.lower()}_items": items})
     except Exception as e:
         await message.answer(get_localized_text(lang, "catalog.fetch_error") + f"\n`{e}`")
         return
     if not items:
+        async with async_session_maker() as db:
+            token_result = await db.execute(
+                select(UserTokens).where(UserTokens.telegram_id == user_id)
+            )
+            token = token_result.scalar_one_or_none()
+
         text_empty = get_localized_text(lang, "catalog.empty")
-        await message.answer(text_empty, reply_markup=main_menu_keyboard(lang, user_id))
+        if token:
+            menu = main_menu_keyboard(lang, user_id)
+        else:
+            menu = await build_main_menu(user_id, lang)
+        await message.answer(text_empty, reply_markup=menu)
         return
+
     total_pages = (len(items) + ITEMS_PER_PAGE - 1) // ITEMS_PER_PAGE
     page = max(1, min(page, total_pages))
     start, end = (page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE
@@ -77,16 +94,19 @@ async def show_products(message: Message, category: str, page: int, state: FSMCo
         branch = product.get("branch_name", "-") or "No branch"
         price = product.get("price_in_app") or product.get("price") or 0
         currency = product.get("currency", "so‘m")
-        distance = round(product.get("distance_km", 0), 2)
+        # distance = round(product.get("distance_km", 0), 2)
+        start_time = product.get("start_time")
+        end_time = product.get("end_time")
 
         text += (
             f"{idx}) 🏪 {business} ({branch})\n"
             f"📦 {title}\n"
             f"💰 {price} {currency}\n"
-            f"📍 {get_localized_text(lang, 'product.distance')}: {distance} km\n\n"
+            f"📍 {get_localized_text(lang, 'product.pickup_time')}: {start_time} - {end_time}\n\n"
         )
 
     markup = products_pagination_keyboard(lang, category, page, total_pages)
+
     if callback_query:
         try:
             await message.edit_text(text, reply_markup=markup)
@@ -108,50 +128,60 @@ async def show_product_detail(
 ):
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
 
     data = await state.get_data()
     key = "superbox_items" if category == "superbox" else f"{category.lower()}_items"
     items = data.get(key, [])
 
-
-    if not redraw:
-        try:
-            await callback.message.delete()
-        except Exception as e:
-            print("DELETE ERROR:", e)
-
     if not items or prod_id < 1 or prod_id > len(items):
         await callback.answer(get_localized_text(lang, "product.not_found"), show_alert=True)
         return
 
+    if not redraw:
+        try:
+            await callback.message.delete()
+        except:
+            pass
+
     product = items[prod_id - 1]
+    product_id = product.get("id") or product.get("surprise_bag")
+    full_product = await fetch_product_detail(product_id, lang)
+
+    if full_product:
+        product = full_product
+
     qty_data = data.get("qty_temp", {})
     qty = qty_data.get(f"{category}_{prod_id}", 1)
-
-    title = product.get("title") or product.get("name") or "No name"
-    branch = product.get("branch_name") or "-"
-    price = int(product.get("price_in_app") or product.get("price") or 0)
-    currency = product.get("currency", "so‘m")
-    distance_str = product.get("distance", "0").split()[0]
+    max_count = int(product.get("count", 1))
+    await state.update_data({f"{category}_{prod_id}_max": max_count})
+    title = product.get("title", "No name")
+    description = product.get("description", "-")
+    branch = product.get("branch_name", "-")
+    business = product.get("business_name", "-")
+    price = float(product.get("price_in_app") or product.get("price") or 0)
+    currency = product.get("currency", "UZS")
+    distance_value = product.get("distance", "0 km")
     try:
-        distance = round(float(distance_str), 2)
+        distance = round(float(distance_value.replace("km", "").strip()), 2)
     except:
         distance = 0.0
-    start_time = product.get("start_time") or "?"
-    end_time = product.get("end_time") or "?"
-    raw_url = product.get("cover_image")
-    image = quote(raw_url, safe=":/") if raw_url else None
+    start_time = product.get("start_time", "?")
+    end_time = product.get("end_time", "?")
+    image_url = product.get("cover_image")
+    image = quote(image_url, safe=":/") if image_url else None
     total_price = price * qty
 
     text = (
-        f"🍔 {title}\n"
-        f"{get_localized_text(lang, 'product.price')}: {total_price} {currency}\n"
-        f"{get_localized_text(lang, 'product.quantity')}: x{qty}\n"
-        f"{get_localized_text(lang, 'product.distance')}: {distance} km\n"
-        f"{get_localized_text(lang, 'product.rating')}: ⭐️5.0\n"
-        f"{get_localized_text(lang, 'product.pickup_time')}: {start_time}–{end_time}\n"
-        f"{get_localized_text(lang, 'product.branch')}: {branch}"
+        f"<b>{business}</b>\n"
+        f"🍔 <b>{title}</b>\n"
+        f"<b>{get_localized_text(lang, 'product.price')}</b> - {total_price} {currency}\n"
+        f"<b>{get_localized_text(lang, 'product.quantity')}</b> - {qty}\n"
+        f"<b>{get_localized_text(lang, 'product.distance')}</b> - {distance} km\n"
+        # f"{get_localized_text(lang, 'product.rating')}: ⭐️5.0\n"
+        f"<b>{get_localized_text(lang, 'product.pickup_time')}</b> - {start_time}–{end_time}\n"
+        f"<b>{get_localized_text(lang, 'product.branch')}</b> - {branch}\n"
+        f"<b>{get_localized_text(lang, 'product.description')}</b> - {description}"
     )
 
     kb = InlineKeyboardBuilder()
@@ -166,7 +196,7 @@ async def show_product_detail(
         try:
             if force_edit or (callback.message.photo and image):
                 await callback.message.edit_media(
-                    media=types.InputMediaPhoto(media=image, caption=text),
+                    media=types.InputMediaPhoto(media=image, caption=text, parse_mode="HTML"),
                     reply_markup=kb.as_markup()
                 )
             else:
@@ -174,14 +204,15 @@ async def show_product_detail(
                     chat_id=callback.message.chat.id,
                     photo=image,
                     caption=text,
+                    parse_mode="HTML",
                     reply_markup=kb.as_markup()
                 )
         except Exception as e:
-            print("MEDIA ERROR:", e)
             await callback.bot.send_photo(
                 chat_id=callback.message.chat.id,
                 photo=image,
                 caption=text,
+                parse_mode="HTML",
                 reply_markup=kb.as_markup()
             )
 
@@ -195,13 +226,25 @@ async def product_detail(callback: CallbackQuery, state: FSMContext):
 
 @router.callback_query(F.data.startswith("qty_inc_"))
 async def increase_qty(callback: CallbackQuery, state: FSMContext):
+    user_id = callback.from_user.id
+    async with async_session_maker() as db:
+        lang = await get_user_lang(user_id)
     category, prod_id = extract_category_and_id(callback.data, 2)
     data = await state.get_data()
     qty_data = dict(data.get("qty_temp", {}))
     key = f"{category}_{prod_id}"
-    qty_data[key] = qty_data.get(key, 1) + 1
+    current_qty = qty_data.get(key, 1)
+    max_count = data.get(f"{category}_{prod_id}_max", 1)
+    if current_qty >= max_count:
+        await callback.answer(
+            get_localized_text(lang, "product.max_qty"),
+            show_alert=True
+        )
+        return
+    qty_data[key] = current_qty + 1
     await state.update_data(qty_temp=qty_data)
     await show_product_detail(callback, state, category, prod_id, redraw=True, force_edit=True)
+
 
 
 @router.callback_query(F.data.startswith("qty_dec_"))
@@ -225,15 +268,14 @@ async def decrease_qty(callback: CallbackQuery, state: FSMContext):
 async def show_superbox(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
     await callback.answer()
     try:
         await callback.message.delete()
     except Exception:
         pass
     try:
-        data = await fetch_surprise_bag()
-        print("🔍 SUPERBOX RESPONSE:", data)
+        data = await fetch_surprise_bag(lang)
     except Exception as e:
         await callback.message.answer(
             get_localized_text(lang, "catalog.fetch_error") + f"\n`{e}`"
@@ -272,7 +314,7 @@ async def show_superbox(callback: CallbackQuery, state: FSMContext):
 async def show_superbox_section(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
 
     section = callback.data.split("superbox_section_")[1]
     data = await state.get_data()
@@ -291,7 +333,8 @@ async def show_superbox_section(callback: CallbackQuery, state: FSMContext):
         "superbox",
         page=1,
         state=state,
-        callback_query=callback
+        callback_query=callback,
+        lang=lang
     )
 
 
@@ -304,14 +347,14 @@ async def show_category(callback: CallbackQuery, state: FSMContext):
     category_slug = callback.data.split("_", 1)[1]
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
     await callback.answer()
     try:
         await callback.message.delete()
     except Exception:
         pass
 
-    await show_products(callback.message, category_slug, page=1, state=state)
+    await show_products(callback.message, category_slug, page=1, state=state, lang=lang)
 
 
 
@@ -322,7 +365,7 @@ async def change_page(callback: CallbackQuery, state: FSMContext):
         page = int(page_str)
     except ValueError:
         async with async_session_maker() as db:
-            lang = await get_user_lang(db, callback.from_user.id)
+            lang = await get_user_lang(callback.from_user.id)
         await callback.answer(get_localized_text(lang, "pagination.invalid"), show_alert=True)
         return
     await callback.answer()
@@ -336,17 +379,17 @@ async def back_to_list(callback: CallbackQuery, state: FSMContext):
     page = int(page_str)
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
     await callback.answer()
     await callback.message.delete()
-    await show_products(callback.message, category, page, state=state)
+    await show_products(callback.message, category, page, state=state, lang=lang)
 
 
 @router.callback_query(F.data == "back_to_catalog")
 async def back_to_catalog(callback: CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
     try:
         await callback.message.delete()
     except Exception:

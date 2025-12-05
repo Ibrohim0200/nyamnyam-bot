@@ -30,7 +30,7 @@ async def add_to_cart(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     category, prod_id = extract_category_and_id(callback.data, 2)
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
 
     data = await state.get_data()
     key = "superbox_items" if category == "superbox" else f"{category.lower()}_items"
@@ -43,36 +43,42 @@ async def add_to_cart(callback: CallbackQuery, state: FSMContext):
     product = items[prod_id - 1]
     qty_data = data.get("qty_temp", {})
     key_qty = f"{category}_{prod_id}"
-    qty = qty_data.get(key_qty, 1)
+    count = qty_data.get(key_qty, 1)
 
     cart = list(data.get("cart", []))
-
-    name = product.get("title") or product.get("business_name") or "No name"
+    id = product.get("id")
+    title = product.get("title") or product.get("business_name") or "No name"
     price = int(product.get("price_in_app") or product.get("price") or 0)
     branch = product.get("branch_name") or "-"
     distance = round(product.get("distance_km", 0), 2)
-    pickup_time = f"{product.get('start_time') or '?'}–{product.get('end_time') or '?'}"
+    start_time = product.get('start_time') or '?'
+    end_time = product.get('end_time') or '?'
+    pickup_time = f"{product.get("start_time") or '?'}-{product.get('end_time') or '?'}"
+    weekday = product.get("weekday", 0)
     raw_url = product.get("cover_image")
     image = quote(raw_url, safe=":/") if raw_url else None
 
     cart.append({
         "category": category,
-        "prod_id": prod_id,
-        "name": name,
+        "id": id,
+        "title": title,
         "price": price,
-        "qty": qty,
+        "count": count,
         "distance": distance,
         "pickup_time": pickup_time,
+        "start_time": start_time,
+        "end_time": end_time,
+        "weekday": weekday,
         "branch": branch,
         "image": image,
     })
 
     await state.update_data(cart=cart)
 
-    total_price = price * qty
+    total_price = price * count
     text = (
         f"{get_localized_text(lang, 'cart.added')}\n\n"
-        f"{name}\n"
+        f"{title}\n"
         f"{get_localized_text(lang, 'cart.total')}: {total_price:,} so‘m"
     )
 
@@ -100,7 +106,7 @@ async def view_cart(callback: CallbackQuery, state: FSMContext):
         pass
 
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
 
     data = await state.get_data()
     cart = data.get("cart", [])
@@ -119,9 +125,9 @@ async def view_cart(callback: CallbackQuery, state: FSMContext):
     total = 0
     text = f"{get_localized_text(lang, 'cart.title')}:\n"
     for i, item in enumerate(cart, 1):
-        item_total = item["price"] * item["qty"]
+        item_total = item["price"] * item["count"]
         total += item_total
-        text += f"{i}) {item['name']} (x{item['qty']}) - {item_total:,} so‘m\n"
+        text += f"{i}) {item['title']} (x{item['count']}) - {item_total:,} so‘m\n"
     text += f"\n—\n{get_localized_text(lang, 'cart.grand_total')}: {total:,} so‘m"
 
     kb = InlineKeyboardBuilder()
@@ -152,7 +158,7 @@ async def clear_cart(callback: CallbackQuery, state: FSMContext):
 async def back_to_catalog(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
     try:
         await callback.message.delete()
     except Exception:
@@ -173,7 +179,7 @@ async def view_cart_item(
     cart = data.get("cart", [])
 
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
 
     if idx is None:
         idx = int(callback.data.split("_")[-1]) - 1
@@ -183,12 +189,12 @@ async def view_cart_item(
         return
 
     item = cart[idx]
-    total_price = item["price"] * item["qty"]
+    total_price = item["price"] * item["count"]
 
     text = (
-        f"🍱 {item['name']}\n"
+        f"🍱 {item['title']}\n"
         f"{get_localized_text(lang, 'product.price')}: {total_price:,} so‘m\n"
-        f"{get_localized_text(lang, 'product.quantity')}: x{item['qty']}\n"
+        f"{get_localized_text(lang, 'product.quantity')}: x{item['count']}\n"
     )
     if item.get("distance"):
         text += f"{get_localized_text(lang, 'product.distance')}: {item['distance']} km\n"
@@ -221,8 +227,7 @@ async def view_cart_item(
             try:
                 await callback.message.delete()
             except Exception as e:
-                print("DELETE ERROR:", e)
-
+                pass
             if image:
                 await callback.message.answer_photo(
                     photo=image,
@@ -232,7 +237,6 @@ async def view_cart_item(
             else:
                 await callback.message.answer(text, reply_markup=kb.as_markup())
     except Exception as e:
-        print("CART ITEM ERROR:", e)
         if image:
             await callback.message.answer_photo(
                 photo=image,
@@ -253,10 +257,10 @@ async def cart_increase(callback: CallbackQuery, state: FSMContext):
     cart = list(data.get("cart", []))
 
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
 
     if 0 <= idx < len(cart):
-        cart[idx]["qty"] = cart[idx].get("qty", 1) + 1
+        cart[idx]["count"] = cart[idx].get("count", 1) + 1
         await state.update_data(cart=cart)
 
     await view_cart_item(callback, state, idx, redraw=True)
@@ -269,12 +273,12 @@ async def cart_decrease(callback: CallbackQuery, state: FSMContext):
     cart = list(data.get("cart", []))
 
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
 
     if 0 <= idx < len(cart):
-        qty = cart[idx].get("qty", 1)
+        qty = cart[idx].get("count", 1)
         if qty > 1:
-            cart[idx]["qty"] = qty - 1
+            cart[idx]["count"] = qty - 1
             await state.update_data(cart=cart)
             await view_cart_item(callback, state, idx, redraw=True)
     else:
@@ -289,11 +293,11 @@ async def cart_delete_confirm(callback: CallbackQuery, state: FSMContext):
     cart = data.get("cart", [])
 
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, callback.from_user.id)
+        lang = await get_user_lang(callback.from_user.id)
 
     if 0 <= idx < len(cart):
         item = cart[idx]
-        name = item["name"]
+        name = item["title"]
         text = (
             f"“{name}” {get_localized_text(lang, 'cart.delete_confirm')}\n"
             f"{get_localized_text(lang, 'cart.no_undo')}"

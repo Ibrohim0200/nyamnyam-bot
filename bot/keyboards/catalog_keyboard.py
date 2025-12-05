@@ -17,11 +17,11 @@ async def catalog_menu_keyboard(lang: str) -> InlineKeyboardMarkup:
     kb = InlineKeyboardBuilder()
     kb.button(text=get_localized_text(lang, "catalog.superbox"), callback_data="cat_surprise_bag")
     try:
-        categories = await fetch_categories()
+        categories = await fetch_categories(lang)
     except Exception:
         categories = []
     for cat in categories:
-        kb.button(text=cat["title"], callback_data=f"cat_{cat['title']}")
+        kb.button(text=cat["title"], callback_data=f"cat_{cat['slug']}")
     kb.button(text=get_localized_text(lang, "catalog.update_location"), callback_data="update_location")
     kb.button(text=get_localized_text(lang, "menu.back"), callback_data="back_to_menu")
     kb.adjust(2, 2, 1)

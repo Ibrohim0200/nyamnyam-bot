@@ -19,8 +19,7 @@ class UserTokens(Base):
     telegram_id = Column(BigInteger, unique=True, index=True)
     access_token = Column(String, nullable=False)
     refresh_token = Column(String, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 class Cart(Base):
     __tablename__ = "cart"

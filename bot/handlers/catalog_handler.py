@@ -2,7 +2,11 @@ import asyncio
 from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
+from sqlalchemy import select
+
+from bot.database.models import UserTokens
 from bot.database.views import get_user_lang
+from bot.handlers.menu_handler import build_main_menu
 from bot.state.user_state import UserState
 from bot.keyboards.catalog_keyboard import location_request_keyboard, catalog_menu_keyboard
 from bot.keyboards.start_keyboard import main_menu_keyboard
@@ -21,7 +25,7 @@ async def catalog_handler(callback: types.CallbackQuery, state: FSMContext):
     bot = callback.bot
 
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
     await safe_delete(bot, chat_id, callback.message.message_id)
 
     if user_id not in user_locations:
@@ -50,7 +54,7 @@ async def catalog_handler(callback: types.CallbackQuery, state: FSMContext):
 async def save_location(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
     user_locations[user_id] = (message.location.latitude, message.location.longitude)
     await state.clear()
     msg = await message.answer(
@@ -68,15 +72,16 @@ async def save_location(message: types.Message, state: FSMContext):
 async def back_to_menu_from_location(message: types.Message, state: FSMContext):
     user_id = message.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
         back_text = get_localized_text(lang, "menu.back")
+
+        result = await db.execute(select(UserTokens).where(UserTokens.telegram_id == user_id))
+        tokens = result.scalar_one_or_none()
 
     if message.text == back_text:
         await state.clear()
-        await message.answer(
-            get_localized_text(lang, "menu.title"),
-            reply_markup=main_menu_keyboard(lang, user_id)
-        )
+        kb = await build_main_menu(user_id, lang) if tokens and tokens.access_token else main_menu_keyboard(lang, user_id)
+        await message.answer(get_localized_text(lang, "menu.title"), reply_markup=kb)
 
 
 # ====================== Show Catalog Menu ======================
@@ -91,20 +96,22 @@ async def show_catalog_menu(message: types.Message, lang: str):
 
 # ====================== Back to Main ======================
 @router.callback_query(F.data == "back_to_menu")
-async def back_to_main(callback: CallbackQuery, state: FSMContext):
+async def back_to_main(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
+        result = await db.execute(select(UserTokens).where(UserTokens.telegram_id == user_id))
+        tokens = result.scalar_one_or_none()
 
     await callback.answer()
     try:
         await callback.message.delete()
     except Exception:
         pass
-    await callback.message.answer(
-        get_localized_text(lang, "menu.main"),
-        reply_markup=main_menu_keyboard(lang, user_id)
-    )
+
+    kb = await build_main_menu(user_id, lang) if tokens and tokens.access_token else main_menu_keyboard(lang, user_id)
+    await callback.message.answer(get_localized_text(lang, "menu.main"), reply_markup=kb)
+
 
 
 # ====================== Update Location ======================
@@ -112,7 +119,7 @@ async def back_to_main(callback: CallbackQuery, state: FSMContext):
 async def update_location(callback: types.CallbackQuery, state: FSMContext):
     user_id = callback.from_user.id
     async with async_session_maker() as db:
-        lang = await get_user_lang(db, user_id)
+        lang = await get_user_lang(user_id)
 
     await callback.answer()
     try:

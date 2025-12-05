@@ -8,3 +8,4 @@ class UserState(StatesGroup):
     editing_email = State()
     editing_password = State()
     buyurtma = State()
+    editing_field = State()
